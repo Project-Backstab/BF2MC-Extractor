@@ -5,6 +5,7 @@ from lib.functions import create_file
 
 def isBlockHeader(block_header_data):
 	return (
+		len(block_header_data) == 0x50 and
 		block_header_data[0] == 3 and block_header_data[1] == 0 and block_header_data[2] == 0 and block_header_data[3] == 0 and
 		block_header_data[24] == 0x51 and block_header_data[40] == 0x52 and block_header_data[56] == 0x53
 	)
@@ -17,6 +18,7 @@ def analise_sux(input_sux_filepath):
 		
 		print("============================================================")
 		print("============================================================")
+		print(input_sux_filepath)
 		print("header: ")
 		print("	{} {} {} {}\n	{} {} {} {}\n	{} {} {} {}\n	{} {} {} {}\n	{} {} {} {}\n	{} {} {} {}\n	{} {} {} {}".format(
 			sux_header_data[0x00:0x04].hex(), sux_header_data[0x04:0x08].hex(), sux_header_data[0x08:0x0C].hex(), sux_header_data[0x0C:0x10].hex(),
@@ -27,7 +29,7 @@ def analise_sux(input_sux_filepath):
 			sux_header_data[0x50:0x54].hex(), sux_header_data[0x54:0x58].hex(), sux_header_data[0x58:0x5C].hex(), sux_header_data[0x5C:0x60].hex(),
 			sux_header_data[0x60:0x64].hex(), sux_header_data[0x64:0x68].hex(), sux_header_data[0x68:0x6C].hex(), sux_header_data[0x6C:0x70].hex())
 		)
-	
+		
 		block_header_address = 0
 		block_index = 0
 		earlier_block_header_address = 0
@@ -57,7 +59,7 @@ def analise_sux(input_sux_filepath):
 					"        ", "        ", "", "",
 					block_header_data[0x40:0x44].hex(), block_header_data[0x44:0x48].hex(), "", "")
 				)
-				#print("	address: {}".format(hex(block_header_address)))
+				print("	address: {}".format(hex(block_header_address)))
 				
 				width = int.from_bytes(block_header_data[0x20:0x24], byteorder='little')
 				height = int.from_bytes(block_header_data[0x24:0x28], byteorder='little')

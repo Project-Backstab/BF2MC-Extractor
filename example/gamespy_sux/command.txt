@@ -1,0 +1,1 @@
+ImageConverter.exe -nomipmaps -verbose gamespy.tga gamespy.sux -8 -savetgas
