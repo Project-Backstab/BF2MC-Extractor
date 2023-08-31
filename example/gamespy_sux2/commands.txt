@@ -1,0 +1,7 @@
+ImageConverter.exe -nomipmaps -verbose gamespy_16x8.tga gamespy_16x8.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_32x16.tga gamespy_32x16.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_64x32.tga gamespy_64x32.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_128x64.tga gamespy_128x64.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_256x128.tga gamespy_256x128.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_512x256.tga gamespy_512x256.sux -8 -savetgas
+ImageConverter.exe -nomipmaps -verbose gamespy_1024x512.tga gamespy_1024x512.sux -8 -savetgas
