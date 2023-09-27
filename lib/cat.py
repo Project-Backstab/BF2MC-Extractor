@@ -3,6 +3,7 @@
 import os
 import json
 import re
+import binascii
 
 from lib.functions import create_file
 
@@ -95,9 +96,12 @@ RESOURCE_FILE_TYPES = [
 RESOURCE_OBJECT_TYPES = [
 	# .brs : Serialised C++ Classes
 	"CameraDescriptor",
+	"ChaseCamera",
 	"ComponentWeaponDescriptor",
 	"DebreeDescriptor",
 	"EffectDescriptor",
+	"EntryInputActionMap",
+	"GameplaySoundDescriptor",
 	"LocatorDescriptor",
 	"LockingComponentDescriptor",
 	"MeshDescriptor",
@@ -111,11 +115,14 @@ RESOURCE_OBJECT_TYPES = [
 	"PhysicsTrackWheelDescriptor",
 	"PhysicsWheelDescriptor",
 	"RigidBodyDescriptor",
+	"SoldierDescriptor",
 	"SoldierEntryDescriptor",
 	"SkinTextureSwitchDescriptor",
 	"SkyDescriptor",
 	"TransformDescriptor",
 	"TreeMeshDescriptor",
+	"VehicleCamera",
+	"VehicleEffectsDescriptor",
 	"WeaponInputRouterDescriptor",
 	
 	# .ani : Animation file (Playback Data)
@@ -126,7 +133,6 @@ RESOURCE_OBJECT_TYPES = [
 	
 	# .sgf : SceneGraphFile Meshes Exported from Maya to PS2 friendly format
 	"monk::collision::ICollisionBody",
-	"Objects/Weapons/Effects/FFARImpacts.pefStaticModel",
 	"SkinnedModel",
 	"StaticModel",
 	"TreeModel",
@@ -134,15 +140,22 @@ RESOURCE_OBJECT_TYPES = [
 	# .god : 
 	"PickupDescriptor",
 	"StaticObjectDescriptor",
+	"TeamDescriptor",
 	"VehicleDescriptor",
+	"LevelSettingsDescriptor",
 	
 	# .prj :
+	"ClientBulletDescriptor",
+	"ClientExplosionPackDescriptor",
+	"ClientGrenadeDescriptor",
 	"ClientMissileDescriptor",
+	"ClientScriptFiringShotDescriptor",
 	
 	# .pef : 
 	"ProjectileImpactEffectDescriptor",
 	
 	# .cam :
+	"FPSCamera",
 	"TransitionCamera",
 	
 	# .msf : 
@@ -158,44 +171,221 @@ RESOURCE_OBJECT_TYPES = [
 	"SoldierCollisionDescriptor",
 	
 	# .wef :
-	"WheelEffectsDescriptor"
+	"WheelEffectsDescriptor",
+	
+	# .wpn
+	"SoldierWeaponDescriptor",
+	"SoldierAimingControllerDescriptor",
+	"WeaponFiringDescriptor",
 ]
 
-def export_cat_resource(input_cat_filepath):
-	## Get cat filename
-	_, cat_filename = os.path.split(input_cat_filepath)
+def find_new_line_positions(data):
+	positions = []
+	start = 0
 	
-	## Create file path to save the files
-	output_cat_files_path = "output/" + cat_filename + "/"
+	while True:
+		position = data.find(b'\x0D\x0A', start)
+		if position == -1:
+			break
+		positions.append(position)
+		start = position + len(b'\x0D\x0A')
 	
+	return positions
+
+def find_objects(data):
+	objects = []
+
+	## Find and iterate through 0x0d0a bytes
+	new_line_positions = find_new_line_positions(data)
+	for new_line_pos in new_line_positions:
+		value = ""
+		
+		## Read ascii characters
+		offset = new_line_pos - 1
+		while(offset >= 0 and (data[offset] >= 0x20 and data[offset] <= 0x7E)):
+			value = chr(data[offset]) + value
+			offset -= 1
+		
+		## remove spaces on begin en ending and split it appart
+		obj_prop = value.strip().split(" ")
+		
+		## Find known object types and patch
+		for resource_object in RESOURCE_OBJECT_TYPES:
+			if(obj_prop[0].endswith(resource_object)):
+				obj_prop[0] = resource_object
+				continue
+		
+		## check object properties
+		if(len(obj_prop) != 2 or obj_prop[0] not in RESOURCE_OBJECT_TYPES):
+			continue
+		
+		space = len(value) - len(value.rstrip())
+		position = new_line_pos - len(obj_prop[0]) - 1 - len(obj_prop[1]) - space
+		
+		## Save object found
+		objects.append({
+			"position": position,
+			"object_type": obj_prop[0],
+			"file_path": obj_prop[1],
+			"space": space,
+			"ref": [],
+			"strings": [],
+			"sux": []
+		})
+
+	return objects
+
+def find_objects_data(objects, data):
+	for i in range(len(objects)):
+		## Get object data 
+		begin = objects[i]["position"] + len(objects[i]["object_type"]) + 1 + len(objects[i]["file_path"]) + objects[i]["space"] + 2
+		
+		if(i != len(objects) - 1):
+			end = objects[i+1]["position"]
+			objects[i]["data"] = data[begin:end]
+		else:
+			objects[i]["data"] = data[begin:]
+	
+	return objects
+
+def find_reference(objects):
+	for i in range(len(objects)):
+		for j in range(len(objects)):
+			object_type = objects[j]["object_type"]
+			file_path = objects[j]["file_path"]
+			
+			find_object = len(object_type).to_bytes(4, byteorder='little') + object_type.encode('ascii') + len(file_path).to_bytes(4, byteorder='little') + file_path.encode('ascii')
+			position = objects[i]["data"].find(find_object, 0)
+			
+			if(position != -1):
+				objects[i]["ref"].append({
+					"object_type": object_type,
+					"file_path": file_path,
+				})
+			else:
+				find_object = len(file_path).to_bytes(4, byteorder='little') + file_path.encode('ascii')
+				position = objects[i]["data"].find(find_object, 0)
+				
+				if(position != -1):
+					objects[i]["ref"].append({
+						"file_path": file_path,
+					})
+	
+	return objects
+
+def find_strings(objects):
+	for i in range(len(objects)):
+		obj_data = objects[i]["data"]
+		
+		for j in range(len(obj_data) - 4):
+			length = int.from_bytes(obj_data[j:j+4], byteorder='little')
+			string = ""
+			
+			if(length > 3 and j + 4 + length < len(obj_data)):
+				for k in range(length):
+					offset = j + 4 + k
+					
+					if(obj_data[offset] >= 0x20 and obj_data[offset] <= 0x7E):
+						string += chr(obj_data[offset])
+						
+						if(k + 1 == length):
+							objects[i]["strings"].append(string)
+							j += 4 + length
+					else:
+						break
+	return objects
+
+def find_sux(objects):
+	for i in range(len(objects)):
+		obj_data = objects[i]["data"]
+		start = 0
+		
+		while True:
+			position = obj_data.find(b'\x2E\x73\x75\x78', start)
+			
+			if position == -1:
+				break
+			
+			filename = ".sux"
+			
+			offset = position - 1
+			while(offset >= 0 and (obj_data[offset] >= 0x20 and obj_data[offset] <= 0x7E)):
+				filename = chr(obj_data[offset]) + filename
+				offset -= 1
+			
+			objects[i]["sux"].append(filename)
+			
+			start = position + len(b'\x2E\x73\x75\x78')
+			
+	return objects
+
+
+def scan_cat_resource(input_cat_filepath, output_files_path):
 	## Create directories if they are missing
-	os.makedirs(output_cat_files_path, exist_ok=True)
+	os.makedirs(output_files_path, exist_ok=True)
 	
 	## Read cat file
 	with open(input_cat_filepath, "rb") as f_cat:
-		with open(output_cat_files_path + "files.txt", "w") as f_files:
-			object_info = ""
+		with open(output_files_path + "files.txt", "w") as f_files:
+			data = f_cat.read()
+			objects = []
 			
-			while(data := f_cat.read(1)):
-				data_int = int.from_bytes(data, byteorder='little')
+			## Find and iterate through 0x0d0a bytes
+			new_line_positions = find_new_line_positions(data)
+			for new_line_pos in new_line_positions:
+				value = ""
 				
-				if(data_int < 0x20 or data_int > 0x7E):
-					matches_file_ext = [(resource_type, match.start()) for resource_type in RESOURCE_FILE_TYPES for match in re.finditer(resource_type, object_info)]
-					
-					#if(" " in object_info and not matches_file_ext):
-					if(" " in object_info and matches_file_ext):
-						matches_obj_type = [(resource_type, match.start()) for resource_type in RESOURCE_OBJECT_TYPES for match in re.finditer(resource_type, object_info)]
-						
-						if(matches_obj_type):
-							for _, _ in matches_file_ext:
-								for resource_type, start_position in matches_obj_type:
-									f_files.write(object_info[start_position:] + "\n")
-						
-						#if(len(object_info) > 8):
-						#	print(object_info)
-					
-					## Reset
-					object_info = ""
-				else:
-					object_info += data.decode("ascii")
+				## Read ascii characters
+				j = new_line_pos - 1
+				while(j >= 0 and (data[j] >= 0x20 and data[j] <= 0x7E)):
+					value = chr(data[j]) + value
+					j -= 1
+				
+				## remove spaces on begin en ending and split it appart
+				obj_prop = value.strip().split(" ")
+				
+				## Find known object types and patch
+				for resource_object in RESOURCE_OBJECT_TYPES:
+					if(obj_prop[0].endswith(resource_object)):
+						obj_prop[0] = resource_object
+						continue
+				
+				## check values found has missing properties
+				if(	len(obj_prop) != 2 or
+					len(obj_prop[0]) < 5 or
+					len(obj_prop[1]) < 5 or
+					obj_prop[0] in RESOURCE_OBJECT_TYPES or
+					obj_prop[0] == "beginElement" or
+					obj_prop[0] == "relativePosition"):
+					continue
+				
+				## Save object properties
+				objects.append(obj_prop)
+			
+			## Display objects that has not been declaired yet in the RESOURCE_OBJECT_TYPES
+			for option in objects:
+				print(option)
 
+def export_cat_resource(input_cat_filepath, output_json_filepath):
+	## Read cat file
+	with open(input_cat_filepath, "rb") as f_cat:
+		with open(output_json_filepath, "w") as f_json:
+			data = f_cat.read()
+			
+			objects = find_objects(data)
+			objects = find_objects_data(objects, data)
+			objects = find_reference(objects)
+			objects = find_strings(objects)
+			objects = find_sux(objects)
+			
+			## Convert data
+			for i in range(len(objects)):
+				## Save data in array
+				obj_data = objects[i]["data"]
+				
+				objects[i]["data"] = []
+				#for j in range(0, len(obj_data), 16):
+				#	objects[i]["data"].append(' '.join(f'{byte:02X}' for byte in obj_data[j:j+16]))
+				
+			
+			f_json.write(json.dumps(objects, indent=4))

@@ -1,3 +1,9 @@
 files/
 output/
 __pycache__/
+
+docs/swizzling/COPYING
+docs/swizzling/devil.dll
+docs/swizzling/ezSwizzle.exe
+docs/swizzling/ilu.dll
+docs/swizzling/ilut.dll

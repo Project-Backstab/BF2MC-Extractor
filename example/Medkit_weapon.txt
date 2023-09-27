@@ -1,0 +1,322 @@
+TeamDescriptor Objects/Spawn/AcTeamCaptureTheFlag.god
+	0D 0A
+	
+	02 00 00 00
+	
+	02 00 00 00		ac
+	02 00 00 00		AC
+	
+	01 00 00 00 05 00 00 00
+	
+	11 00 00 00		SoldierDescriptor
+	23 00 00 00		Objects/Soldiers/Assault/Ac_Ass.god
+	
+	11 00 00 00		SoldierDescriptor
+	22 00 00 00		Objects/Soldiers/Sniper/Ac_Sni.god
+	
+	11 00 00 00		SoldierDescriptor
+	26 00 00 00		Objects/Soldiers/SpecialOps/Ac_Ops.god
+	
+	11 00 00 00		SoldierDescriptor
+	24 00 00 00		Objects/Soldiers/Engineer/Ac_Eng.god
+	
+	11 00 00 00		SoldierDescriptor
+	23 00 00 00		Objects/Soldiers/Support/Ac_Sup.god
+	
+	29 00 00 00		Objects/Weapons/AC/Bag/Bag.god:SoldierBag
+	
+	01 00 00 00
+	
+	37 00 00 00		Objects/Misc_Objects/AC_GameplaySoundCaptureTheFlag.brs
+	
+	0D 0A
+	
+	40
+
+SoldierDescriptor Objects/Soldiers/Support/Ac_Sup.god
+	0D 0A
+	
+	05 00 00 00 00 00 C8 42 00 00 7A 44 CD CC 4C 3E
+	
+	1A 00 00 00		SoldierCollisionDescriptor
+	31 00 00 00		Objects/Soldiers/Collision/AssEngSupCollision.col
+	
+	05 00 00 00
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	2F 00 00 00		Objects/Weapons/AC/PKMMachinegun/PKM_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	47 00 00 00		Objects/Weapons/Generic/ArtilleryStrike/Arab_ArtilleryStrike_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	29 00 00 00		Objects/Weapons/Ac/Tariq/Tariq_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	2C 00 00 00		Objects/Weapons/Ac/Rgo78/Ac_Rgo78_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	30 00 00 00		Objects/Weapons/Generic/Medkit/Medkit_weapon.wpn
+	
+	00 00 00 00
+	
+	16 00 00 00		HumanPhysicsDescriptor
+	2B 00 00 00		Objects/Soldiers/Support/Ac_Sup_Physics.hum
+	
+	15 00 00 00		PlayerEntryDescriptor
+	2D 00 00 00		Objects/Soldiers/Entry/SoldierEntry.brs:Entry
+	
+	0B 00 00 00 00 00 00 00 64 00 00 00 00 00 A0 41
+	
+	2C 00 00 00		Objects/Soldiers/Support/AC_SUP_3P_ANIMS.atr
+	2C 00 00 00		Objects/Soldiers/Support/AC_SUP_1P_ANIMS.atr
+	
+	01 00 00 00
+	
+	09 00 00 00		FPSCamera
+	25 00 00 00		Objects/Soldiers/Camera/FPSCamera.cam
+	26 00 00 00		Sounds/Scripts/Soldiers/Ac_Soldier.msf
+	1E 00 00 00		Sounds/Scripts/Weapons/Mp5.msf
+	
+	9A 99 19 3E 0A D7 23 3E CD CC 0C 3F 9A 99 19 3F
+	9A 99 99 3E 00 00 F0 41
+	
+	48 00 00 00 	Objects/Misc_Objects/Level01/Paraschute/Paraschute.sgf:Render_Paraschute
+	17 00 00 00		_SBulletHit_Neutral_com
+	0D 00 00 00		WaterStir_com
+	
+	0A D7 23 3D
+	
+	0F 00 00 00		WaterSplash_com
+	33 00 00 00		Objects/Soldiers/Effects/RagdollCollisionEffect.pef
+	0A 00 00 00		ac/support
+	07 00 00 00		SUPPORT
+	
+	02 00 00 00 01 01 00 00 00 66 66 A6 3F 66 66 A6
+	3F 00 00 C0 3F 00 00 40 40 00 00 00 00 00 00 00
+	00 03 00 00 00 7B 14 2E 3E 29 5C 8F 3D EE 7C 3F
+	BE 78 EC C3 BF FC 8C 7B 3F CF 2D CA BF CD CC CC
+	3D CD CC CC 3D CD CC CC 3D 00 00 00 3F
+
+	40
+
+SoldierDescriptor Objects/Soldiers/Support/Us1_Sup.god
+	0D 0A
+	
+	05 00 00 00 00 00 C8 42 00 00 7A 44 CD CC 4C 3E
+	
+	1A 00 00 00		SoldierCollisionDescriptor
+	31 00 00 00		Objects/Soldiers/Collision/AssEngSupCollision.col
+	
+	05 00 00 00
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	27 00 00 00		Objects/Weapons/US/M249/M249_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	42 00 00 00		Objects/Weapons/Generic/ArtilleryStrike/ArtilleryStrike_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	2F 00 00 00		Objects/Weapons/US/BerettaM9/Beretta_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	35 00 00 00		Objects/Weapons/US/FragGrenade/FragGrenade_weapon.wpn
+	
+	17 00 00 00		SoldierWeaponDescriptor
+	30 00 00 00		Objects/Weapons/Generic/Medkit/Medkit_weapon.wpn
+	
+	00 00 00 00
+	
+	16 00 00 00		HumanPhysicsDescriptor
+	2C 00 00 00		Objects/Soldiers/Support/Us1_Sup_Physics.hum
+	
+	15 00 00 00		PlayerEntryDescriptor
+	2D 00 00 00		Objects/Soldiers/Entry/SoldierEntry.brs:Entry
+	
+	0B 00 00 00 00 00 00 00 64 00 00 00 00 00 A0 41
+	
+	2D 00 00 00 	Objects/Soldiers/Support/US1_SUP_3P_ANIMS.atr
+	2D 00 00 00		Objects/Soldiers/Support/US1_SUP_1P_ANIMS.atr
+	
+	01 00 00 00
+	
+	09 00 00 00		FPSCamera
+	25 00 00 00		Objects/Soldiers/Camera/FPSCamera.cam
+	26 00 00 00		Sounds/Scripts/Soldiers/US_Soldier.msf
+	1E 00 00 00		Sounds/Scripts/Weapons/Mp5.msf
+	
+	9A 99 19 3E 0A D7 23 3E CD CC 0C 3F 9A 99 19 3F
+	9A 99 99 3E 00 00 F0 41
+	
+	48 00 00 00		Objects/Misc_Objects/Level01/Paraschute/Paraschute.sgf:Render_Paraschute
+	17 00 00 00		_SBulletHit_Neutral_com
+	0D 00 00 00		WaterStir_com
+	
+	0A D7 23 3D
+	
+	0F 00 00 00		WaterSplash_com
+	33 00 00 00		Objects/Soldiers/Effects/RagdollCollisionEffect.pef
+	0A 00 00 00		us/support
+	07 00 00 00		SUPPORT
+	
+	02 00 00 00 01 01 00 00 00 66 66 A6 3F 66 66 A6
+	3F 00 00 C0 3F 00 00 40 40 00 00 00 00 00 00 00
+	00 03 00 00 00 7B 14 2E 3E 29 5C 8F 3D EE 7C 3F
+	BE 78 EC C3 BF FC 8C 7B 3F CF 2D CA BF CD CC CC
+	3D CD CC CC 3D CD CC CC 3D 00 00 00 3F
+	
+	40
+
+SoldierWeaponDescriptor Objects/Weapons/Generic/Medkit/Medkit_weapon.wpn
+	0D 0A
+	
+	04 00 00 00
+
+	16 00 00 00		WeaponFiringDescriptor
+	30 00 00 00		Objects/Weapons/Generic/Medkit/Medkit_firing.wpn
+	
+	00
+
+	1D 00 00 00		MedkitWeaponEffectsDescriptor
+	
+	01 00 00 00 00 00 00 40 05 00 00 00
+
+	21 00 00 00		SoldierAimingControllerDescriptor
+	30 00 00 00		Objects/Weapons/Generic/Medkit/Medkit_aiming.wpn
+
+	9A 99 19 BE CD CC 4C BE 0A D7 23 3C BC 74 13 3C
+	0A D7 23 BC 00 00 00 00 CD CC CC BD 9A 99 99 3E
+	0A D7 A3 BC 9A 99 99 3E 8F C2 F5 BC 9A 99 99 3E
+	8F C2 F5 BC 9A 99 99 3E 00 00 0C 42 00 00 00 00
+	00 00
+	
+	40
+
+WeaponFiringDescriptor Objects/Weapons/Generic/Medkit/Medkit_firing.wpn
+	0D 0A
+	
+	02 00 00 00 04 00 00 00 02 00 00 00 02 00 00 00
+	01 00 00 00 03 00 00 00 00 00 00 00 03 00 00 00
+	00 00 80 3F 00 00 00 00 00 00 00 00 52 B8 9E 3E
+	00 00 00 00 00 00 00 00 00 00 80 3F 00 00 00 00
+	00 00 00 00 00 00 A0 41 00 00 00 00 00 00 00 00
+	00 00 00 00 01 00 00 00
+	
+	16 00 00 00		ClientBulletDescriptor
+	33 00 00 00		Objects/Weapons/Ammunition/Medkit/Medkit_Bullet.prj
+	
+	02 00 00 00 00 00 00 00 00 00 70 42 00 00 80 3F
+	00 00 00 00 02 00 00 00 00 00 00 40 00 00 00 00
+	00 00 00 00 00 00 00 00 03 00 00 00 00 00 20 41
+	00 00 00 00 00 00 80 3F 00 00 00 3F 00 00 00 00
+	00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00
+	00 02 00 00 00 FF FF FF FF 01 00 00 00 00 00 00
+	00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80
+	3F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 01 00 00 00
+	
+	04 00 00 00		null
+	04 00 00 00		null
+	
+	02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 03 00 00 00 00 00 20 41
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00
+	00 00 07 00 00 00
+	
+	24 00 00 00		Sounds/Scripts/Weapons/Injection.msf
+	
+	00 00 00 00 00 00 00 00 00 00 80 3F 00 00 80 3F
+	00 00 00 00 00 00 00 00 07 00 00 00
+	
+	04 00 00 00		null
+	
+	00 00 00 00 00 00 00 00 00 00 80 3F 00 00 80 3F
+	00 00 00 00 00 00 00 00 01 00 00 00
+	
+	12 00 00 00		Weapons/autoinject
+	
+	00 00 C0 40 00 00 A0 40 01 00 00 00
+	
+	12 00 00 00		Weapons/icon_medic
+	
+	00 00 00 00 00 00 A0 41
+	
+	40
+
+SoldierAimingControllerDescriptor Objects/Weapons/Generic/Medkit/Medkit_aiming.wpn
+	0D 0A 04 00 00 00 02 00 00 00 01 03 00 00 00 00
+	00 00 00 00 00 80 3F 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 33
+	33 73 3F 00 00 00 41 00 00 00 40 01 33 33 B3 3F
+	01 00 00 00 3F 00 00 40 3F 00 00 00 3F 00 00 80
+	3F 00 00 00 00 00 00 80 3F 00 00 80 3F 9A 99 99
+	3F 00 00 00 00 00 00 00 00 03 00 00 00 00 00 AA
+	C2 00 00 AA 42 00 00 80 BF 33 33 33 3F CD CC CC
+	3E 03 00 00 00 00 00 AA C2 00 00 AA 42 00 00 80
+	BF 00 00 00 3F CD CC CC 3E 03 00 00 00 00 00 AA
+	C2 00 00 AA 42 00 00 80 BF CD CC CC 3D CD CC CC
+	3D 01 00 00 00 06 00 00 00 00 00 A0 42 33 33 33
+	3F 26 00 00 00 FF FF FF FF 00
+	
+	04 00 00 00		null
+	
+	00 00 00 00 00 00 00 00 CD CC CC 3D 8F C2 F5 3C
+	33 33 33 3F CD CC CC 3D 00 00 00 00 29 5C 0F 3E
+	CD CC CC 3C 00 00 00 00 00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 80 3F 00 00 80 3F
+	00 00 80 3F 00 00 00 3F 00 00 C8 42 00 00 00 00
+	
+	40
+
+ClientBulletDescriptor Objects/Weapons/Ammunition/Medkit/Medkit_Bullet.prj
+	0D 0A 04 00 00 00 9A 99
+	99 3E 00 00 00 00 00 00 00 06 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 00 00 00 00 00
+	
+	04 00 00 00		null
+	04 00 00 00		null
+	04 00 00 00		null
+	04 00 00 00		null
+	
+	40
+
+ISoundBlockTemplateWrapper Sounds/Scripts/Weapons/Injection.msf
+	20 0D 0A
+	
+	<msfstr>
+	
+	17 05 00 00
+	
+	#line 1 "Source\\Shared\\Sounds\\Scripts\\Weapons\\Injection.msf"
+	#line 1 "Source\\Shared\\Sounds\\Scripts\\Weapons\\../includes/default.inc"
+	#line 1 "Source\\Shared\\Sounds\\Scripts\\Weapons\\../includes/values.inc"
+	#line 10 "Source\\Shared\\Sounds\\Scripts\\Weapons\\../includes/values.inc"
+	#line 5 "Source\\Shared\\Sounds\\Scripts\\Weapons\\../includes/default.inc"
+	#line 184 "Source\\Shared\\Sounds\\Scripts\\Weapons\\../includes/default.inc"
+	#line 2 "Source\\Shared\\Sounds\\Scripts\\Weapons\\Injection.msf"
+
+	beginBlock 1;
+		beginElement Border/Audio/Weapon/Injection@RTT;
+			sustainingSound;
+			distanceEnvelope 0 0 30 100;
+			relativePosition 0.3/0.0/0.3;
+
+			beginEnvelope 0 0 inject; 0 0; 1 1; 2 0; 3 1; -1;
+			
+			beginEffect 0; 0; 0 0.55; -1;;
+			beginEffect 1; 1; 0 1.0; -1;;
+			
+			beginEffect 3; 3; 0 1.0; 1 1.0; 2 1.0; 3 0.1; 4 0; -1;;
+
+			assign 0 3 0 1.0;
+		endElement;
+	endBlock;

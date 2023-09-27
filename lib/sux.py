@@ -13,7 +13,6 @@ def isBlockHeader(block_header_data):
 def analise_sux(input_sux_filepath):
 	## Read sux file
 	with open(input_sux_filepath, "rb") as f_sux:
-		
 		sux_header_data = f_sux.read(0x60)
 		
 		print("============================================================")
@@ -43,6 +42,8 @@ def analise_sux(input_sux_filepath):
 				
 				print("Block {}:".format(block_index))
 				print("	header:")
+				
+				## All header values
 				"""
 				print("		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}".format(
 					block_header_data[0x00:0x04].hex(), block_header_data[0x04:0x08].hex(), block_header_data[0x08:0x0C].hex(), block_header_data[0x0C:0x10].hex(),
@@ -52,12 +53,14 @@ def analise_sux(input_sux_filepath):
 					block_header_data[0x40:0x44].hex(), block_header_data[0x44:0x48].hex(), block_header_data[0x48:0x4C].hex(), block_header_data[0x4C:0x50].hex())
 				)
 				"""
-				print("		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}\n		{} {} {} {}".format(
-					block_header_data[0x00:0x04].hex(), block_header_data[0x04:0x08].hex(), block_header_data[0x08:0x0C].hex(), "",
-					block_header_data[0x10:0x14].hex(), block_header_data[0x14:0x18].hex(), "", "",
-					block_header_data[0x20:0x24].hex(), block_header_data[0x24:0x28].hex(), "", "",
-					"        ", "        ", "", "",
-					block_header_data[0x40:0x44].hex(), block_header_data[0x44:0x48].hex(), "", "")
+				
+				## Header values that are relavent
+				print(
+					"		{}\n		{} {}\n		{} {}".format(
+						block_header_data[0x14:0x18].hex(),
+						block_header_data[0x20:0x24].hex(), block_header_data[0x24:0x28].hex(),
+						block_header_data[0x40:0x44].hex(), block_header_data[0x44:0x48].hex()
+					)
 				)
 				print("	address: {}".format(hex(block_header_address)))
 				
