@@ -15,6 +15,7 @@ def main():
 	export_ark("output/iso/BF2MC_MP/DATA.ARK", "output/DATA.ARK/")
 	print("Done!")
 	
+	"""
 	## Extract level cat files
 	for level_name, file_names in CAT_LEVEL_FILES.items():
 		for file_name in file_names:
@@ -47,7 +48,7 @@ def main():
 				print("Export \"{}\"".format(input_file_path))
 				export_cat_resource(input_file_path, output_json_filepath)
 				print("Done!")
-	
+	"""
 	"""
 	export_cat_resource("output/DATA.ARK/Border/Levels/BackStab/resources.cat",
 			"output/DATA.ARK/Border/Levels/BackStab/resources.cat.json")

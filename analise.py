@@ -35,14 +35,29 @@ def main():
 	
 	analise_sux("example/gamespy_sux/powered_by_gamespy.sux")
 	analise_sux("example/gamespy_sux/gamespy.sux")
-	
-	analise_sux("example/gamespy_sux2/gamespy_16x8.sux")
-	analise_sux("example/gamespy_sux2/gamespy_32x16.sux")
-	analise_sux("example/gamespy_sux2/gamespy_64x32.sux")
-	analise_sux("example/gamespy_sux2/gamespy_128x64.sux")
-	analise_sux("example/gamespy_sux2/gamespy_256x128.sux")
-	analise_sux("example/gamespy_sux2/gamespy_512x256.sux")
-	analise_sux("example/gamespy_sux2/gamespy_1024x512.sux")
 	"""
-
+	
+	"""
+	analise_sux("example/gamespy_sux2/gamespy_16x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_32x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_32x16.sux")
+	analise_sux("example/gamespy_sux2/gamespy_64x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_64x32.sux")
+	analise_sux("example/gamespy_sux2/gamespy_128x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_128x64.sux")
+	analise_sux("example/gamespy_sux2/gamespy_256x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_256x128.sux")
+	analise_sux("example/gamespy_sux2/gamespy_512x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_512x256.sux")
+	analise_sux("example/gamespy_sux2/gamespy_1024x8.sux")
+	analise_sux("example/gamespy_sux2/gamespy_1024x512.sux")
+	
+	analise_sux2("example/gamespy_sux3/gamespy_128x64_4.sux")
+	analise_sux2("example/gamespy_sux3/gamespy_128x64_8.sux")
+	analise_sux2("example/gamespy_sux3/gamespy_128x64_32.sux")
+	
+	
+	analise_sux2("output/DATA.ARK/Border/menus/Textures/advert.sux")
+	"""
+	
 main()
