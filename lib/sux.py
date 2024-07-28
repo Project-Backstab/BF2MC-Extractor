@@ -23,49 +23,63 @@ def print_header(block_header_data, tabs):
         
         # Print the formatted line
         print(tabs + formatted_line)
-
-def isBlockHeader(block_header_data):
-	return (
-		len(block_header_data) == 0x50 and
-		block_header_data[0] == 3 and block_header_data[1] == 0 and block_header_data[2] == 0 and block_header_data[3] == 0 and
-		block_header_data[24] == 0x51 and block_header_data[40] == 0x52 and block_header_data[56] == 0x53
-	)
-
+				
 def analise_sux(input_sux_filepath):
 	## Read sux file
 	with open(input_sux_filepath, "rb") as f_sux:
 		print("============================================================")
-		print("============================================================")
 		print(input_sux_filepath)
 		
-		if(sux_header_data := f_sux.read(0x70)):
+		## Read main header
+		if(main_header_data := f_sux.read(0x60)):
 			
+			## Debug
 			print("header: ")
-			print_header(sux_header_data, "	")
+			print_header(main_header_data, "	")
 			
-			block_index = 0
-			while(block_header_data := f_sux.read(0x50)):				
-				if(isBlockHeader(block_header_data)):
-					block_data_size = ((block_header_data[0x41] & 0xF) << 0xC) + (block_header_data[0x40] << 0x4)
-				else:
-					extra_data = f_sux.read(0x10)
-					block_header_data = block_header_data + extra_data
-					block_data_size = ((block_header_data[0x51] & 0xF) << 0xC) + (block_header_data[0x50] << 0x4)
-					
-					if(not isBlockHeader(block_header_data[0x10:0x60])):
-						print("Something went wrong?! {}".format(block_header_data[0x00:0x04].hex()))
-						return
+			image_index = 0
+			while(image_header_data := f_sux.read(0x10)):
+				## Calculate image data size
+				image_data_size = ((image_header_data[1] << 0x8) + image_header_data[0]) * 0x10
 				
-				block_data = f_sux.read(block_data_size)
-				
+				## Debug
 				print("")
-				print("Block {}:".format(block_index))
-				print("	header:")
-				print_header(block_header_data, "		")
-				print("	data_size: {} ({})".format(block_data_size, hex(block_data_size)))
+				print("	image {}: ".format(image_index))
+				print("		header:")
+				print_header(image_header_data, "			")
+				print("		data_size: {} ({})".format(image_data_size, hex(image_data_size)))
 				
-				block_index += 1
+				## Read blocks
+				block_index = 0
+				image_data_read = 0
+				while(image_data_read < image_data_size):
+					
+					## Read block header
+					if(block_header_data := f_sux.read(0x50)):
+						image_data_read += 0x50
+						
+						## Calculate block data size and read block data
+						block_data_size = ((block_header_data[0x41] & 0xF) << 0xC) + (block_header_data[0x40] << 0x4)
+						image_data_read += block_data_size
+						f_sux.read(block_data_size)
+						
+						## Debug
+						print("")
+						print("		block {}: ".format(block_index))
+						print("			header:")
+						print_header(block_header_data, "				")
+						print("			data_size: {} ({})".format(block_data_size, hex(block_data_size)))
+						
+						block_index += 1
+					else:
+						print("ERROR: Can't read block header.")
+				
+				## In case there is not enough read then its defined in the file.
+				if(image_data_read != image_data_size):
+					print("ERROR: image_data_read != image_data_size")
+				
+				image_index += 1
 		else:
-			print("Sux file doesn't have enough data.")
-				
-				
+			print("ERROR: Not enough sux data for the main header.")
+		
+		print("============================================================")
