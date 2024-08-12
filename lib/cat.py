@@ -177,6 +177,35 @@ RESOURCE_OBJECT_TYPES = [
 	"SoldierWeaponDescriptor",
 	"SoldierAimingControllerDescriptor",
 	"WeaponFiringDescriptor",
+	
+	# Found on Game Server
+	"ServerBulletDescriptor",
+	"ServerCapturePointDescriptor",
+	"ServerEntryDescriptor",
+	"ServerMissileDescriptor",
+	"ServerGrenadeDescriptor",
+	"ServerEntryDescriptor",
+	"ServerExplosionPackDescriptor",
+	"ServerExplosionPackDetonatorDescriptor",
+	"ServerObjectDescriptor",
+	"ServerPickupWrapperDescriptor",
+	"ServerScriptFiringShotDescriptor",
+	"ServerSoldierSpawnGroupDescriptor",
+	"ServerSoldierSpawnPointDescriptor",
+	"ServerSpawnMarkerDescriptor",
+	"ServerSpectateCameraDescriptor",
+	"ServerTriggerZoneDescriptor",
+	"ServerVehicleSpawnPointDescriptor",
+	
+	"EntryDescriptor",
+	"WeaponDescriptor",
+	"PhysicsBuoyancyForceDescriptor",
+	"PhysicsWingForceDescriptor",
+	"WaterEffectDescriptor",
+	"ObjectDescriptor",
+	"BulletDescriptor",
+	"DamageZoneDescriptor",
+	"ControllableDescriptor"
 ]
 
 def find_new_line_positions(data):
@@ -386,6 +415,6 @@ def export_cat_resource(input_cat_filepath, output_json_filepath):
 				objects[i]["data"] = []
 				#for j in range(0, len(obj_data), 16):
 				#	objects[i]["data"].append(' '.join(f'{byte:02X}' for byte in obj_data[j:j+16]))
-				
+				objects[i]["position"] = hex(objects[i]["position"])
 			
 			f_json.write(json.dumps(objects, indent=4))

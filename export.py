@@ -4,7 +4,9 @@ import os
 from lib.ark import export_ark
 from lib.cat import export_cat, export_cat_resource
 from lib.viv import export_viv
-from battlefield.files import CAT_LEVEL_FILES
+from lib.static_geometry import extract_static_geometry, import_static_geometry
+from lib.level_txt import extract_level_txt, import_level_txt
+from battlefield.files import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
 def main():
 	## Export iso file
@@ -15,18 +17,35 @@ def main():
 	export_ark("output/iso/BF2MC_MP/DATA.ARK", "output/DATA.ARK/")
 	print("Done!")
 	
-	"""
 	## Extract level cat files
 	for level_name, file_names in CAT_LEVEL_FILES.items():
+		input_level_path = "output/DATA.ARK/Border/Levels/{}/".format(level_name)
+		output_level_path = "output/Levels/{}/".format(level_name)
+		
+		## Static Geometry
+		input_static_geometry = input_level_path + "level_client_static_geometry.txt"
+		
+		print("Export \"{}\"".format(input_static_geometry))
+		extract_static_geometry(input_static_geometry, input_static_geometry + ".json")
+		print("Done!")
+		
+		## Level txt
+		input_level_txt = input_level_path + "level_client.txt"
+		
+		print("Export \"{}\"".format(input_level_txt))
+		extract_level_txt(input_level_txt, input_level_txt + ".json")
+		print("Done!")
+		
 		for file_name in file_names:
 			if "resource" not in file_name:
-				input_file_path = "output/DATA.ARK/Border/Levels/{}/{}".format(level_name, file_name)
-				output_files_path = "output/Levels/{}/{}/".format(level_name, file_name)
+				input_file_path = input_level_path + file_name
+				output_files_path = output_level_path + file_name + "/"
 				
 				print("Export \"{}\"".format(input_file_path))
 				export_cat(input_file_path, output_files_path)
 				print("Done!")
 	
+	"""
 	print("Export \"output/iso/SINGLE/8.VIV\"")
 	export_viv("output/iso/SINGLE/8.VIV", "output/8.VIV/")
 	print("Done!")
@@ -49,12 +68,5 @@ def main():
 				export_cat_resource(input_file_path, output_json_filepath)
 				print("Done!")
 	"""
-	"""
-	export_cat_resource("output/DATA.ARK/Border/Levels/BackStab/resources.cat",
-			"output/DATA.ARK/Border/Levels/BackStab/resources.cat.json")
-	export_cat_resource("output/DATA.ARK/Border/Levels/BackStab/resourcesCaptureTheFlag.cat",
-			"output/DATA.ARK/Border/Levels/BackStab/resourcesCaptureTheFlag.cat.json")
-	export_cat_resource("output/DATA.ARK/Border/Levels/BackStab/resourcesconquest.cat",
-			"output/DATA.ARK/Border/Levels/BackStab/resourcesconquest.cat.json")
-	"""
+
 main()
