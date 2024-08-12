@@ -8,65 +8,105 @@ from lib.static_geometry import extract_static_geometry, import_static_geometry
 from lib.level_txt import extract_level_txt, import_level_txt
 from battlefield.files import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
+configs = [
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (USA).iso",
+		"data_ark_directory":		"BF2MC_MP/",
+		"output_directory":			"output/US/",
+		"cat_files":				CAT_LEVEL_FILES,
+		"has_static_geometry":		True,
+		"has_level_txt":			True,
+		"extract_viv":				False
+	},
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
+		"data_ark_directory":		"BF2MC_MP/",
+		"output_directory":			"output/V1.00/",
+		"cat_files":				CAT_LEVEL_FILES_V1_0,
+		"has_static_geometry":		True,
+		"has_level_txt":			True,
+		"extract_viv":				False
+	},
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
+		"data_ark_directory":		"BF2MC_MP/",
+		"output_directory":			"output/V2.01/",
+		"cat_files":				CAT_LEVEL_FILES_V2_01,
+		"has_static_geometry":		True,
+		"has_level_txt":			True,
+		"extract_viv":				False
+	},
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (USA) (Beta).iso",
+		"data_ark_directory":		"",
+		"output_directory":			"output/BETA/",
+		"cat_files":				CAT_LEVEL_FILES_BETA,
+		"has_static_geometry":		False,
+		"has_level_txt":			False,
+		"extract_viv":				False
+	},
+]
+
 def main():
-	## Export iso file
-	os.system("7z x \"files/Battlefield 2 - Modern Combat (USA).iso\" -ooutput/iso")
+	for config in configs:
+		## Create directories if they are missing
+		os.makedirs(config["output_directory"], exist_ok=True)
 	
-	## Export ARK files
-	print("Export \"output/iso/BF2MC_MP/DATA.ARK\"")
-	export_ark("output/iso/BF2MC_MP/DATA.ARK", "output/DATA.ARK/")
-	print("Done!")
-	
-	## Extract level cat files
-	for level_name, file_names in CAT_LEVEL_FILES.items():
-		input_level_path = "output/DATA.ARK/Border/Levels/{}/".format(level_name)
-		output_level_path = "output/Levels/{}/".format(level_name)
+		## Export iso file
+		os.system("7z x \"{}\" -o{}iso".format(config["iso"], config["output_directory"]))
 		
-		## Static Geometry
-		input_static_geometry = input_level_path + "level_client_static_geometry.txt"
+		## Export ARK files
+		input_ark_file = "{}/iso/{}/DATA.ARK".format(config["output_directory"], config["data_ark_directory"])
+		output_ark_directory = "{}/DATA.ARK/".format(config["output_directory"])
 		
-		print("Export \"{}\"".format(input_static_geometry))
-		extract_static_geometry(input_static_geometry, input_static_geometry + ".json")
+		print("Export \"{}\"".format(input_ark_file))
+		export_ark(input_ark_file, output_ark_directory)
 		print("Done!")
 		
-		## Level txt
-		input_level_txt = input_level_path + "level_client.txt"
-		
-		print("Export \"{}\"".format(input_level_txt))
-		extract_level_txt(input_level_txt, input_level_txt + ".json")
-		print("Done!")
-		
-		for file_name in file_names:
-			if "resource" not in file_name:
-				input_file_path = input_level_path + file_name
-				output_files_path = output_level_path + file_name + "/"
+		## Iterate through each level
+		for level_name, file_names in config["cat_files"].items():
+			input_level_path = "{}/DATA.ARK/Border/Levels/{}/".format(config["output_directory"], level_name)
+			output_level_path = "{}/Levels/{}/".format(config["output_directory"], level_name)
+			
+			## Static Geometry
+			if(config["has_static_geometry"]):
+				input_static_geometry = "{}/level_client_static_geometry.txt".format(input_level_path)
+				
+				print("Export \"{}\"".format(input_static_geometry))
+				extract_static_geometry(input_static_geometry, input_static_geometry + ".json")
+				print("Done!")
+				
+			## Level txt
+			if(config["has_level_txt"]):
+				input_level_txt = "{}/level_client.txt".format(input_level_path)
+				
+				print("Export \"{}\"".format(input_level_txt))
+				extract_level_txt(input_level_txt, input_level_txt + ".json")
+				print("Done!")
+			
+			## Extract cat files
+			for file_name in file_names:
+				input_file_path = "{}/{}".format(input_level_path, file_name)
+				output_files_path = "{}/{}/".format(output_level_path, file_name)
 				
 				print("Export \"{}\"".format(input_file_path))
-				export_cat(input_file_path, output_files_path)
+				if "resource" not in file_name:			
+					export_cat(input_file_path, output_files_path)
+				else:
+					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")
-	
-	"""
-	print("Export \"output/iso/SINGLE/8.VIV\"")
-	export_viv("output/iso/SINGLE/8.VIV", "output/8.VIV/")
-	print("Done!")
-	
-	print("Export \"output/iso/SINGLE/DATA.VIV\"")
-	export_viv("output/iso/SINGLE/DATA.VIV", "output/DATA.VIV/")
-	print("Done!")
-	
-	print("Export \"output/iso/SINGLE/DATA2.VIV\"")
-	export_viv("output/iso/SINGLE/DATA2.VIV", "output/DATA2.VIV/")
-	print("Done!")
-	
-	for level_name, file_names in CAT_LEVEL_FILES.items():
-		for file_name in file_names:
-			if "resource" in file_name:
-				input_file_path = "output/DATA.ARK/Border/Levels/{}/{}".format(level_name, file_name)
-				output_json_filepath = "output/DATA.ARK/Border/Levels/{}/{}".format(level_name, file_name + ".json")
-				
-				print("Export \"{}\"".format(input_file_path))
-				export_cat_resource(input_file_path, output_json_filepath)
-				print("Done!")
-	"""
+		
+		if(config["extract_viv"]):
+			print("Export \"output/iso/SINGLE/8.VIV\"")
+			export_viv("output/iso/SINGLE/8.VIV", "output/8.VIV/")
+			print("Done!")
+			
+			print("Export \"output/iso/SINGLE/DATA.VIV\"")
+			export_viv("output/iso/SINGLE/DATA.VIV", "output/DATA.VIV/")
+			print("Done!")
+			
+			print("Export \"output/iso/SINGLE/DATA2.VIV\"")
+			export_viv("output/iso/SINGLE/DATA2.VIV", "output/DATA2.VIV/")
+			print("Done!")
 
 main()

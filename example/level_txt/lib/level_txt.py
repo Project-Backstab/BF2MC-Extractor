@@ -11,20 +11,20 @@ class TransformData:
 	rot: List[float] = field(default_factory=list)
 
 @dataclass
-class Model:
-	type: str = ""
-	name: str = ""
+class Mesh:
+	class_name: str = ""
+	resource_name: str = ""
 	
 @dataclass
 class Component:
-	unknown_1_1: str = ""
-	unknown_1_2: str = ""
-	unknown_1_3: int = 0
+	resource_name: str = ""
+	class_name: str = ""
+	version: int = 1
 	unknown_1_4: str = ""
 	
-	models: List[Model] = field(default_factory=list)
+	meshs: List[Mesh] = field(default_factory=list)
 	
-	unknown_1_5: str = ""
+	rigidBodyDescriptor: str = ""
 	unknown_1_6: str = ""
 	
 	instances: List[TransformData] = field(default_factory=list)
@@ -61,34 +61,34 @@ def extract_level_txt(input_file_path, output_file_path):
 		for i in range(components_length):
 			component = Component()
 			
-			unknown_1_1_length = struct.unpack('<I', f_txt.read(4))[0]
-			component.unknown_1_1 = f_txt.read(unknown_1_1_length).decode("ascii")
+			resource_name_length = struct.unpack('<I', f_txt.read(4))[0]
+			component.resource_name = f_txt.read(resource_name_length).decode("ascii")
 			
-			unknown_1_2_length = struct.unpack('<I', f_txt.read(4))[0]
-			component.unknown_1_2 = f_txt.read(unknown_1_2_length).decode("ascii")
+			class_name_length = struct.unpack('<I', f_txt.read(4))[0]
+			component.class_name = f_txt.read(class_name_length).decode("ascii")
 			
-			if component.unknown_1_2 != "SkyWrapperDescriptor":
-				component.unknown_1_3 = struct.unpack('<I', f_txt.read(4))[0]
+			if component.class_name != "SkyWrapperDescriptor":
+				component.version = struct.unpack('<I', f_txt.read(4))[0]
 				
 				component.unknown_1_4 = f_txt.read(5).hex()	
 			
-			models_total = struct.unpack('<I', f_txt.read(4))[0]
+			meshs_total = struct.unpack('<I', f_txt.read(4))[0]
 			
-			for j in range(models_total):
-				model = Model()
+			for j in range(meshs_total):
+				mesh = Mesh()
 				
-				if component.unknown_1_2 != "SkyWrapperDescriptor":
-					model_type_length = struct.unpack('<I', f_txt.read(4))[0]
-					model.type = f_txt.read(model_type_length).decode("ascii")
+				if component.class_name != "SkyWrapperDescriptor":
+					mesh_class_name_length = struct.unpack('<I', f_txt.read(4))[0]
+					mesh.class_name = f_txt.read(mesh_class_name_length).decode("ascii")
 				
-				model_length = struct.unpack('<I', f_txt.read(4))[0]
-				model.name = f_txt.read(model_length).decode("ascii")
+				mesh_resource_name_length = struct.unpack('<I', f_txt.read(4))[0]
+				mesh.resource_name = f_txt.read(mesh_resource_name_length).decode("ascii")
 				
-				component.models.append(model)
+				component.meshs.append(mesh)
 				
-			if component.unknown_1_2 != "SkyWrapperDescriptor":
-				unknown_1_5_length = struct.unpack('<I', f_txt.read(4))[0]
-				component.unknown_1_5 = f_txt.read(unknown_1_5_length).decode("ascii")
+			if component.class_name != "SkyWrapperDescriptor":
+				rigidBodyDescriptor_length = struct.unpack('<I', f_txt.read(4))[0]
+				component.rigidBodyDescriptor = f_txt.read(rigidBodyDescriptor_length).decode("ascii")
 			
 				component.unknown_1_6 = f_txt.read(4).hex()
 			
@@ -120,37 +120,37 @@ def import_level_txt(input_file_path, output_file_path):
 			f_txt.write(struct.pack("<I", len(components)))
 			
 			for component in components:
-				unknown_1_1 = component["unknown_1_1"]
-				f_txt.write(struct.pack("<I", len(unknown_1_1)))
-				f_txt.write(unknown_1_1.encode("ascii"))
+				resource_name = component["resource_name"]
+				f_txt.write(struct.pack("<I", len(resource_name)))
+				f_txt.write(resource_name.encode("ascii"))
 				
-				unknown_1_2 = component["unknown_1_2"]
-				f_txt.write(struct.pack("<I", len(unknown_1_2)))
-				f_txt.write(unknown_1_2.encode("ascii"))
+				class_name = component["class_name"]
+				f_txt.write(struct.pack("<I", len(class_name)))
+				f_txt.write(class_name.encode("ascii"))
 				
-				if unknown_1_2 != "SkyWrapperDescriptor":
-					f_txt.write(struct.pack("<I", component["unknown_1_3"]))
+				if class_name != "SkyWrapperDescriptor":
+					f_txt.write(struct.pack("<I", component["version"]))
 					
 					f_txt.write(bytes.fromhex(component["unknown_1_4"]))
 				
-				## Models
-				models = component["models"]
-				f_txt.write(struct.pack("<I", len(models)))
+				## Meshs
+				meshs = component["meshs"]
+				f_txt.write(struct.pack("<I", len(meshs)))
 				
-				for model in models:
-					if unknown_1_2 != "SkyWrapperDescriptor":
-						model_type = model["type"]
-						f_txt.write(struct.pack("<I", len(model_type)))
-						f_txt.write(model_type.encode("ascii"))
+				for mesh in meshs:
+					if class_name != "SkyWrapperDescriptor":
+						mesh_class_name = mesh["class_name"]
+						f_txt.write(struct.pack("<I", len(mesh_class_name)))
+						f_txt.write(mesh_class_name.encode("ascii"))
 					
-					model_name = model["name"]
-					f_txt.write(struct.pack("<I", len(model_name)))
-					f_txt.write(model_name.encode("ascii"))
+					resource_name = mesh["resource_name"]
+					f_txt.write(struct.pack("<I", len(resource_name)))
+					f_txt.write(resource_name.encode("ascii"))
 				
-				if unknown_1_2 != "SkyWrapperDescriptor":
-					unknown_1_5 = component["unknown_1_5"]
-					f_txt.write(struct.pack("<I", len(unknown_1_5)))
-					f_txt.write(unknown_1_5.encode("ascii"))
+				if class_name != "SkyWrapperDescriptor":
+					rigidBodyDescriptor = component["rigidBodyDescriptor"]
+					f_txt.write(struct.pack("<I", len(rigidBodyDescriptor)))
+					f_txt.write(rigidBodyDescriptor.encode("ascii"))
 					
 					f_txt.write(bytes.fromhex(component["unknown_1_6"]))
 				

@@ -208,6 +208,7 @@ RESOURCE_OBJECT_TYPES = [
 	"ControllableDescriptor"
 ]
 
+"""
 def find_new_line_positions(data):
 	positions = []
 	start = 0
@@ -348,7 +349,6 @@ def find_sux(objects):
 			
 	return objects
 
-
 def scan_cat_resource(input_cat_filepath, output_files_path):
 	## Create directories if they are missing
 	os.makedirs(output_files_path, exist_ok=True)
@@ -395,6 +395,7 @@ def scan_cat_resource(input_cat_filepath, output_files_path):
 			for option in objects:
 				print(option)
 
+
 def export_cat_resource(input_cat_filepath, output_json_filepath):
 	## Read cat file
 	with open(input_cat_filepath, "rb") as f_cat:
@@ -418,3 +419,93 @@ def export_cat_resource(input_cat_filepath, output_json_filepath):
 				objects[i]["position"] = hex(objects[i]["position"])
 			
 			f_json.write(json.dumps(objects, indent=4))
+"""
+
+"""
+	Convert file path to new one to avoid strange symboles:
+	
+	Example:
+		Objects/Weapons/AC/Bag/Bag.sgf:Render_Ac_OpsKit
+		output/Objects/Weapons/AC/Bag/Bag.Render_Ac_OpsKit.sgf
+"""
+def modify_file_path(file_path):
+	## fix: windows slashes
+	new_file_path = file_path.replace("\\", "/")
+
+	## Fix: capital letter cases that caused trouble extracting.
+	new_file_path = new_file_path.replace("/vehicles/", "/Vehicles/")
+	new_file_path = new_file_path.replace("/Ac/", "/AC/")
+	new_file_path = new_file_path.replace("/Ac_Pickup/", "/AC_Pickup/")
+	new_file_path = new_file_path.replace("/US_apache/", "/US_Apache/")
+	new_file_path = new_file_path.replace("/Ch/", "/CH/")
+	new_file_path = new_file_path.replace("/Eu/", "/EU/")
+	new_file_path = new_file_path.replace("/SMAWrocketlauncher/", "/SMAWRocketLauncher/")
+	new_file_path = new_file_path.replace("SMAWrocketlauncher", "SMAWRocketLauncher2")
+	new_file_path = new_file_path.replace("/L85A2Assaultrifle/", "/L85A2AssaultRifle/")
+	new_file_path = new_file_path.replace("/US_Lav/", "/US_LAV/")
+	
+	# Split the path on the last occurrence of ":"
+	path_parts = new_file_path.rsplit(':', 1)
+	
+	if len(path_parts) != 2:
+		# If the path doesn't contain ":", return it unchanged
+		return new_file_path
+
+	path_before_colon = path_parts[0]
+	path_after_colon = path_parts[1]
+
+	# Split the path_before_colon on the last occurrence of "."
+	path_parts_before_dot = path_before_colon.rsplit('.', 1)
+	if len(path_parts_before_dot) != 2:
+		# If the path_before_colon doesn't contain ".", return it unchanged
+		return new_file_path
+
+	base_path = path_parts_before_dot[0]
+	extension = path_parts_before_dot[1]
+
+	# Construct the new path
+	new_file_path = f"{base_path}.{path_after_colon}.{extension}"
+	
+	return new_file_path
+
+def export_cat_resource(input_cat_filepath, output_files_path):
+	## Create directories if they are missing
+	os.makedirs(output_files_path, exist_ok=True)
+	
+	# Create a regex pattern with all class names, including optional "@" in front
+	pattern_string = rb'|'.join(
+		re.escape(classname.encode('ascii')) for classname in RESOURCE_OBJECT_TYPES
+	)
+	
+	# Full pattern
+	pattern = re.compile(
+		rb'@?(' + pattern_string + rb')' # Class names
+		rb'\x20'                         # Space
+		rb'([^\x20\r\n\x00]+)'           # File path (matches any character except space, newline, and null byte)
+		rb'\x20*'                        # Zero or more spaces
+		rb'\x0D\x0A'                     # \r\n
+	)
+
+	with open(input_cat_filepath, 'rb') as f_cat:
+		content = f_cat.read()
+		
+		matches = list(pattern.finditer(content))
+		results = []
+		
+		for i, match in enumerate(matches):
+			classname = match.group(1).decode('ascii')
+			file_path = match.group(2).decode('ascii')
+			patched_file_path = modify_file_path(file_path)
+			
+			offset = match.start()
+			next_offset = matches[i + 1].start() if i + 1 < len(matches) else len(content)
+			
+			## Debug
+			#print("===============================")
+			#print(f'classname = "{classname}"')
+			#print(f'file_path = "{file_path}"')
+			#print(f'patched_file_path = "{patched_file_path}"')
+			#print(f'offset = {offset}')
+			#print(f'next_offset = {next_offset}')
+			
+			create_file(output_files_path + "/" + patched_file_path, content[offset:next_offset])

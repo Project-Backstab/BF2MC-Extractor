@@ -1738,6 +1738,16 @@ CAT_LEVEL_FILES_V2_01 = {
 }
 
 CAT_LEVEL_FILES_BETA = {
+	"animTuning": [
+        "audio_capturetheflag.cat",
+        "audio_conquest.cat",
+        "textures.cat",
+        "texturescapturetheflag.cat",
+        "texturesconquest.cat",
+		"resources.cat",
+		"resourcescapturetheflag.cat",
+		"resourcesconquest.cat"
+    ],
     "BackStab": [
         "audio_CaptureTheFlag.cat",
         "audio_common.cat",
@@ -1745,7 +1755,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "BridgeTooFar": [
         "audio_capturetheflag.cat",
@@ -1754,7 +1766,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturescapturetheflag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcescapturetheflag.cat",
+		"resourcesconquest.cat"
     ],
     "ColdFront": [
         "audio_CaptureTheFlag.cat",
@@ -1763,7 +1777,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesConquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesConquest.cat"
     ],
     "Dammage": [
         "audio_CaptureTheFlag.cat",
@@ -1772,7 +1788,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesConquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesConquest.cat"
     ],
     "DeadlyPass": [
         "audio_CaptureTheFlag.cat",
@@ -1781,7 +1799,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "HarborEdge": [
         "audio_CaptureTheFlag.cat",
@@ -1790,7 +1810,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesConquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesConquest.cat"
     ],
     "Honor": [
         "audio_CaptureTheFlag.cat",
@@ -1799,7 +1821,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "LittleBigEye": [
         "audio_CaptureTheFlag.cat",
@@ -1808,7 +1832,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "MissileCrisis": [
         "audio_CaptureTheFlag.cat",
@@ -1817,7 +1843,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "RussianBorder": [
         "audio_CaptureTheFlag.cat",
@@ -1826,7 +1854,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "SpecialOp": [
         "audio_CaptureTheFlag.cat",
@@ -1835,7 +1865,9 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
     "TheBlackGold": [
         "audio_CaptureTheFlag.cat",
@@ -1843,7 +1875,8 @@ CAT_LEVEL_FILES_BETA = {
         "audio_conquest.cat",
         "textures.cat",
         "texturesconquest.cat",
-
+		"resources.cat",
+		"resourcesconquest.cat"
     ],
     "TheNest": [
         "audio_CaptureTheFlag.cat",
@@ -1852,6 +1885,19 @@ CAT_LEVEL_FILES_BETA = {
         "textures.cat",
         "texturesCaptureTheFlag.cat",
         "texturesConquest.cat",
-
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesConquest.cat"
+    ],
+	"wilderness": [
+        "audio_CaptureTheFlag.cat",
+        "audio_common.cat",
+        "audio_conquest.cat",
+        "textures.cat",
+        "texturesCaptureTheFlag.cat",
+        "texturesconquest.cat",
+		"resources.cat",
+		"resourcesCaptureTheFlag.cat",
+		"resourcesconquest.cat"
     ],
 }
