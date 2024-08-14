@@ -1,0 +1,162 @@
+{
+  "extensions": {},
+  "extras": {},
+  "accessors": [
+    {
+      "extensions": {},
+      "extras": {},
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "normalized": false,
+      "count": 3,
+      "type": "VEC3",
+      "sparse": null,
+      "max": [
+        0.5,
+        0.5,
+        0.0
+      ],
+      "min": [
+        -0.5,
+        -0.5,
+        0.0
+      ],
+      "name": null
+    },
+    {
+      "extensions": {},
+      "extras": {},
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "normalized": false,
+      "count": 3,
+      "type": "SCALAR",
+      "sparse": null,
+      "max": [
+        2
+      ],
+      "min": [
+        0
+      ],
+      "name": null
+    }
+  ],
+  "animations": [],
+  "asset": {
+    "extensions": {},
+    "extras": {},
+    "generator": "pygltflib@v1.16.2",
+    "copyright": null,
+    "version": "2.0",
+    "minVersion": null
+  },
+  "bufferViews": [
+    {
+      "extensions": {},
+      "extras": {},
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 36,
+      "byteStride": null,
+      "target": 34962,
+      "name": null
+    },
+    {
+      "extensions": {},
+      "extras": {},
+      "buffer": 0,
+      "byteOffset": 36,
+      "byteLength": 6,
+      "byteStride": null,
+      "target": 34963,
+      "name": null
+    }
+  ],
+  "buffers": [
+    {
+      "extensions": {},
+      "extras": {},
+      "uri": "triangle.bin",
+      "byteLength": 42
+    }
+  ],
+  "cameras": [],
+  "extensionsUsed": [],
+  "extensionsRequired": [],
+  "images": [],
+  "materials": [],
+  "meshes": [
+    {
+      "extensions": {},
+      "extras": {},
+      "primitives": [
+        {
+          "extensions": {},
+          "extras": {},
+          "attributes": {
+            "POSITION": 0
+          },
+          "indices": 1,
+          "mode": 4,
+          "material": null,
+          "targets": []
+        }
+      ],
+      "weights": [],
+      "name": null
+    }
+  ],
+  "nodes": [
+    {
+      "extensions": {},
+      "extras": {},
+      "mesh": 0,
+      "skin": null,
+      "rotation": null,
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": null,
+      "children": [],
+      "matrix": null,
+      "camera": null,
+      "name": null
+    },
+    {
+      "extensions": {},
+      "extras": {},
+      "mesh": 0,
+      "skin": null,
+      "rotation": null,
+      "translation": [
+        2,
+        0,
+        0
+      ],
+      "scale": null,
+      "children": [],
+      "matrix": null,
+      "camera": null,
+      "name": null
+    }
+  ],
+  "samplers": [],
+  "scene": 0,
+  "scenes": [
+    {
+      "extensions": {},
+      "extras": {},
+      "name": null,
+      "nodes": [
+        0,
+        1
+      ]
+    }
+  ],
+  "skins": [],
+  "textures": []
+}
