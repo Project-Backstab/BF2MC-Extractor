@@ -1,12 +1,14 @@
 #!/bin/env python3
 
 import os
-from lib.ark import export_ark
-from lib.cat import export_cat, export_cat_resource
-from lib.viv import export_viv
-from lib.static_geometry import extract_static_geometry, import_static_geometry
-from lib.level_txt import extract_level_txt, import_level_txt
-from battlefield.files import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
+from lib.ark                       import export_ark
+from lib.cat                       import export_cat, export_cat_resource
+from lib.viv                       import export_viv
+from lib.txt.level_static_geometry import export_level_static_geometry_txt
+from lib.txt.level                 import export_level_txt
+from lib.brs.mesh_descriptor       import export_mesh_descriptor
+from lib.lnd                       import export_ps2_lnd
+from battlefield.files             import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
 configs = [
 	{
@@ -51,7 +53,8 @@ def main():
 	for config in configs:
 		## Create directories if they are missing
 		os.makedirs(config["output_directory"], exist_ok=True)
-	
+		os.makedirs("{}/Levels/".format(config["output_directory"]), exist_ok=True)
+		
 		## Export iso file
 		os.system("7z x \"{}\" -o{}iso".format(config["iso"], config["output_directory"]))
 		
@@ -68,20 +71,20 @@ def main():
 			input_level_path = "{}/DATA.ARK/Border/Levels/{}/".format(config["output_directory"], level_name)
 			output_level_path = "{}/Levels/{}/".format(config["output_directory"], level_name)
 			
-			## Static Geometry
+			## Level Static Geometry .txt
 			if(config["has_static_geometry"]):
 				input_static_geometry = "{}/level_client_static_geometry.txt".format(input_level_path)
 				
 				print("Export \"{}\"".format(input_static_geometry))
-				extract_static_geometry(input_static_geometry, input_static_geometry + ".json")
+				export_level_static_geometry_txt(input_static_geometry, input_static_geometry + ".json")
 				print("Done!")
 				
-			## Level txt
+			## Level .txt
 			if(config["has_level_txt"]):
 				input_level_txt = "{}/level_client.txt".format(input_level_path)
 				
 				print("Export \"{}\"".format(input_level_txt))
-				extract_level_txt(input_level_txt, input_level_txt + ".json")
+				export_level_txt(input_level_txt, input_level_txt + ".json")
 				print("Done!")
 			
 			## Extract cat files
@@ -95,6 +98,27 @@ def main():
 				else:
 					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")
+		
+		for root, dirs, files in os.walk("{}/DATA.ARK/".format(config["output_directory"])):
+			for file in files:
+				if file.endswith('.lnd'):
+					input_file_path = os.path.join(root, file)
+					
+					print("Export \"{}\"".format(input_file_path))
+					export_ps2_lnd(input_file_path, input_file_path + ".obj")
+					print("Done!")
+		
+		"""
+		## In Development
+		for root, dirs, files in os.walk("{}/Levels/".format(config["output_directory"])):
+			for file in files:
+				if file.endswith('.brs'):
+					input_file_path = os.path.join(root, file)
+					
+					print("Export \"{}\"".format(input_file_path))
+					export_mesh_descriptor(input_file_path, input_file_path + ".json")
+					print("Done!")
+		"""
 		
 		if(config["extract_viv"]):
 			print("Export \"output/iso/SINGLE/8.VIV\"")

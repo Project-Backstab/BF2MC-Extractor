@@ -1,7 +1,7 @@
 #!/bin/env python3
 
 import os
-from lib.level_txt import extract_level_txt, import_level_txt
+from lib.txt.level import extract_level_txt, import_level_txt
 
 def main():
 	extract_level_txt("files/BackStab/level_client.txt", "output/BackStab/level_client.txt.json")

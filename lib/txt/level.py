@@ -50,7 +50,7 @@ class CustomEncoder(json.JSONEncoder):
 			return clean_nan(asdict(obj))
 		return super().default(obj)
 
-def extract_level_txt(input_file_path, output_file_path):
+def export_level_txt(input_file_path, output_file_path):
 	level_txt = LevelTxt()
 	
 	## read Static Geometry

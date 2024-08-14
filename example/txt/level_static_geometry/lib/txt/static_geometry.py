@@ -46,7 +46,7 @@ class CustomEncoder(json.JSONEncoder):
 			return clean_nan(asdict(obj))
 		return super().default(obj)
 
-def extract_static_geometry(input_file_path, output_file_path, is_client = True):
+def export_level_static_geometry(input_file_path, output_file_path, is_client = True):
 	static_geometry = StaticGeometry()
 	static_geometry.is_client = is_client
 	
@@ -93,7 +93,7 @@ def extract_static_geometry(input_file_path, output_file_path, is_client = True)
 	with open(output_file_path, 'w') as f_json:
 		json.dump(static_geometry, f_json, cls=CustomEncoder, indent=4)
 
-def import_static_geometry(input_file_path, output_file_path):
+def import_level_static_geometry(input_file_path, output_file_path):
 	with open(input_file_path, 'r') as f_json:
 		with open(output_file_path, 'wb') as f_txt:
 			static_geometry = json.load(f_json)
