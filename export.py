@@ -55,6 +55,7 @@ def main():
 		os.makedirs(config["output_directory"], exist_ok=True)
 		os.makedirs("{}/Levels/".format(config["output_directory"]), exist_ok=True)
 		
+		
 		## Export iso file
 		os.system("7z x \"{}\" -o{}iso".format(config["iso"], config["output_directory"]))
 		
@@ -108,8 +109,6 @@ def main():
 					export_ps2_lnd(input_file_path, input_file_path + ".obj")
 					print("Done!")
 		
-		"""
-		## In Development
 		for root, dirs, files in os.walk("{}/Levels/".format(config["output_directory"])):
 			for file in files:
 				if file.endswith('.brs'):
@@ -118,7 +117,6 @@ def main():
 					print("Export \"{}\"".format(input_file_path))
 					export_mesh_descriptor(input_file_path, input_file_path + ".json")
 					print("Done!")
-		"""
 		
 		if(config["extract_viv"]):
 			print("Export \"output/iso/SINGLE/8.VIV\"")
