@@ -8,6 +8,7 @@ from lib.txt.level_static_geometry import export_level_static_geometry_txt
 from lib.txt.level                 import export_level_txt
 from lib.brs.mesh_descriptor       import export_mesh_descriptor
 from lib.lnd                       import export_ps2_lnd
+from lib.sgf                       import export_sgf, export_sgf_beta
 from battlefield.files             import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
 configs = [
@@ -18,26 +19,29 @@ configs = [
 		"cat_files":				CAT_LEVEL_FILES,
 		"has_static_geometry":		True,
 		"has_level_txt":			True,
+		"is_beta":					False,
 		"extract_viv":				False
 	},
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
-		"data_ark_directory":		"BF2MC_MP/",
-		"output_directory":			"output/V1.00/",
-		"cat_files":				CAT_LEVEL_FILES_V1_0,
-		"has_static_geometry":		True,
-		"has_level_txt":			True,
-		"extract_viv":				False
-	},
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
-		"data_ark_directory":		"BF2MC_MP/",
-		"output_directory":			"output/V2.01/",
-		"cat_files":				CAT_LEVEL_FILES_V2_01,
-		"has_static_geometry":		True,
-		"has_level_txt":			True,
-		"extract_viv":				False
-	},
+#	{
+#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
+#		"data_ark_directory":		"BF2MC_MP/",
+#		"output_directory":			"output/V1.00/",
+#		"cat_files":				CAT_LEVEL_FILES_V1_0,
+#		"has_static_geometry":		True,
+#		"has_level_txt":			True,
+#		"is_beta":					False,
+#		"extract_viv":				False
+#	},
+#	{
+#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
+#		"data_ark_directory":		"BF2MC_MP/",
+#		"output_directory":			"output/V2.01/",
+#		"cat_files":				CAT_LEVEL_FILES_V2_01,
+#		"has_static_geometry":		True,
+#		"has_level_txt":			True,
+#		"is_beta":					False,
+#		"extract_viv":				False
+#	},
 	{
 		"iso":						"files/Battlefield 2 - Modern Combat (USA) (Beta).iso",
 		"data_ark_directory":		"",
@@ -45,6 +49,7 @@ configs = [
 		"cat_files":				CAT_LEVEL_FILES_BETA,
 		"has_static_geometry":		False,
 		"has_level_txt":			False,
+		"is_beta":					True,
 		"extract_viv":				False
 	},
 ]
@@ -54,7 +59,6 @@ def main():
 		## Create directories if they are missing
 		os.makedirs(config["output_directory"], exist_ok=True)
 		os.makedirs("{}/Levels/".format(config["output_directory"]), exist_ok=True)
-		
 		
 		## Export iso file
 		os.system("7z x \"{}\" -o{}iso".format(config["iso"], config["output_directory"]))
@@ -116,6 +120,18 @@ def main():
 					
 					print("Export \"{}\"".format(input_file_path))
 					export_mesh_descriptor(input_file_path, input_file_path + ".json")
+					print("Done!")
+					
+				
+				if file.endswith('.sgf'):
+					input_file_path = os.path.join(root, file)
+					output_file_path = f"{input_file_path}.json"
+					
+					print(f"Export \"{input_file_path}\"")
+					if(config["is_beta"]):
+						export_sgf_beta(input_file_path, output_file_path)
+					else:
+						export_sgf(input_file_path, output_file_path)
 					print("Done!")
 		
 		if(config["extract_viv"]):

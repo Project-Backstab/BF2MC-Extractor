@@ -1,0 +1,152 @@
+
+Begin: 	
+End:	
+
+53 74 61 74 69 63 4D 6F 64 65 6C 20 4F 62 6A 65			StaticModel Objects/Vegetation/DES/Rocks/DesBigRock007.sgf:Render_DesBigRock007
+63 74 73 2F 56 65 67 65 74 61 74 69 6F 6E 2F 44
+45 53 2F 52 6F 63 6B 73 2F 44 65 73 42 69 67 52
+6F 63 6B 30 30 37 2E 73 67 66 3A 52 65 6E 64 65
+72 5F 44 65 73 42 69 67 52 6F 63 6B 30 30 37 20
+20 20 20 20 20 20 20 20 20 20 20 20 20 20 0D 0A
+
+1B 00 00 00												* Unknown
+
+02 00 00 00												* objects total: 2
+
+	00 00 C8 42												* Unknown: In float32 its "100" WTF?!
+
+	F0 23 74 49												* Unknown: In float32 its "999999" WHY?!
+
+00 00 00 00												* Unknown
+
+02 00 00 00												* 2 Materials
+
+Material 0:
+	41 72 63 42 69 67 52 6F 63 6B 30 30 37 5F 47 72			ArcBigRock007_GroundRock_2M
+	6F 75 6E 64 52 6F 63 6B 5F 32 4D 00
+	
+	00 00 00 00												* Unknown string
+	
+	00 00 00 00												* Unknown string
+	
+	00 00 00 00												* Unknown string
+	
+	44 65 66 61 75 6C 74 00									Default
+
+	02 00 00 00												* 2 Images
+	
+	Image 0:
+		76 65 67 65 74 61 74 69 6F 6E 5C 67 72 6F 75 6E			vegetation\groundrock.sux
+		64 72 6F 63 6B 2E 73 75 78 00 00 00
+		
+		F8 F5 3B 43 4A 71 2F 40 01 01 00 00
+	
+	Image 1:
+		76 65 67 65 74 61 74 69 6F 6E 5C 67 72 6F 75 6E			vegetation\groundrock_det.sux
+		64 72 6F 63 6B 5F 64 65 74 2E 73 75 78 00 00 00
+		
+		F8 F5 3B 43 B4 84 C8 41 01 01 00 00
+
+Material 1:
+	6C 61 6D 62 65 72 74 33 00 00 00 00						lambert3
+	
+	00 00 00 00												* Unknown string
+	
+	00 00 00 00												* Unknown string
+	
+	00 00 00 00												* Unknown string
+	
+	44 65 66 61 75 6C 74 00									Default
+	
+	01 00 00 00												* Images total: 1
+	
+	Image 0:
+		76 65 67 65 74 61 74 69 6F 6E 5C 64 65 73 5C 64			vegetation\des\desbigrocklod2.sux
+		65 73 62 69 67 72 6F 63 6B 6C 6F 64 32 2E 73 75
+		78 00 00 00
+		
+		EB AF 38 43 1D 80 A3 3E 01 01 00 00						* Unknown	
+
+Object 0:
+	01 00 00 00 85 95 93 C0 39 05 48 BD 3C C9 AA C0			* Unknown
+	C2 C0 BA 40 64 33 D6 40 3D C9 AA 40 64 33 D6 40
+	68 D4 67 BF C8 CF 98 BF 78 9C 46 40 63 D7 04 40
+	D8 01 00 00 00 00 00 00
+
+	01 00 00 00												* Meshes total
+
+	Mesh 0:
+		00 00 00 00												* Material id?
+
+		76 00 00 00												* 118 vertices
+
+		Vertex 0:
+			79 26 A6 3F DB 23 A1 40 4B 7F 02 40						* Position
+			
+			2C 1A 26 00 44 3E 36 80 9D 22 EC 3E 38 CE 79 3F			* Unknown
+			00 00 00 00 00 00 00 00 C0 AE 44 3E 54 3D BC BE
+			00 00 00 00 00 00 00 00
+			
+			01 00 00 00												* Flag for Triangle strips
+
+		Vertex 1:
+			BD 94 C2 3E F9 62 BE 40 81 EB 23 40
+			
+			09 1D 37 00 4C 45 3D 80 E4 02 AB 3E 1F 45 17 3F			* Unknown
+			00 00 00 00 00 00 00 00 C8 68 83 3D 28 35 41 BF
+			00 00 00 00 00 00 00 00
+			
+			01 00 00 00												* Flag for Triangle strips
+
+		Vertex 2:
+			FE C1 C9 3E 8A B7 B4 40 EE 98 23 40
+			
+			06 16 3B 00 23 1C 14 80 EE 90 AD 3E B9 22 1B 3F			* Unknown
+			00 00 00 00 00 00 00 00 78 FD DF 3D 18 30 1E BF
+			00 00 00 00 00 00 00 00
+			
+			00 00 00 00												* Flag for Triangle strips
+		
+		... More Vertices
+		
+Object 1:
+	01 00 00 00 37 7E 9E C0 00 00 00 00 1C DA B3 C0			* Unknown
+	AE F5 AF 40 97 C4 E1 40 3D C9 AA 40 97 C4 E1 40
+	00 00 00 00 00 00 00 00 97 EE 7E 3F 23 E2 FD 3F
+	94 00 00 00 00 00 00 00
+
+	01 00 00 00												* Meshes total
+
+	Mesh 0:
+		01 00 00 00												* Material id?
+
+		25 00 00 00												* 37 vertices
+		
+		Vertex 0:
+			00 30 8E 3E 00 00 00 00 A7 C1 9E 40						* Position
+			
+			FA EE 3D 00 80 80 80 80 A0 ED 40 3F 00 00 00 00			* Unknown
+			00 00 00 00 00 00 00 00 30 73 FB 3F 00 00 00 00
+			00 00 00 00 00 00 00 00
+			
+			01 00 00 00												* Flag for Triangle strips
+		
+		Vertex 1:
+			B8 16 1D 3F 19 56 95 3F 3D C9 AA 40						* Position
+			
+			FD 03 3F 00
+			80 80 80 80 F0 25 44 3F 00 00 00 00 00 00 00 00			* Unknown
+			00 00 00 00 D4 6D F2 3F 00 00 00 00 00 00 00 00
+			00 00 00 00
+			
+			01 00 00 00												* Flag for Triangle strips
+		
+		Vertex 2:
+			37 7E 9E C0 00 00 00 00 47 51 20 BC						* Position
+			
+			C9 0D 1E 00 80 80 80 80 69 11 01 3F 00 00 00 00			* Unknown
+			00 00 00 00 00 00 00 00 23 E2 FD 3F 00 00 00 00
+			00 00 00 00 00 00 00 00
+			
+			00 00 00 00												* Flag for Triangle strips
+		

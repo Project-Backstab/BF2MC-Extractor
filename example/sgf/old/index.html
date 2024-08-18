@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Triangle Strip Visualization</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+		
+		.dropdown {
+			position: absolute;
+			display: inline-block;
+			float: right; /* Float dropdown to the right */
+			margin: 20px;
+		}
+
+		.dropdown-btn {
+			background-color: #4CAF50; /* Green background */
+			color: white; /* White text */
+			padding: 16px; /* Some padding */
+			font-size: 16px; /* Font size */
+			border: none; /* Remove borders */
+			cursor: pointer; /* Pointer cursor on hover */
+		}
+
+		.dropdown-content {
+			display: none; /* Hidden by default */
+			position: absolute; /* Position it below the button */
+			background-color: #f9f9f9; /* Light background */
+			min-width: 160px; /* Set the width of the dropdown */
+			box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Shadow effect */
+			z-index: 1; /* Ensure it is above other content */
+		}
+
+		.dropdown-content a {
+			color: black; /* Black text */
+			padding: 12px 16px; /* Padding */
+			text-decoration: none; /* Remove underline */
+			display: block; /* Block display */
+		}
+
+		.dropdown-content a:hover {
+			background-color: #f1f1f1; /* Change background on hover */
+		}
+
+		.dropdown:hover .dropdown-content {
+			display: block; /* Show dropdown on hover */
+		}
+
+		.dropdown:hover .dropdown-btn {
+			background-color: #3e8e41; /* Darker green background on hover */
+		}
+    </style>
+</head>
+<body>
+	<div class="dropdown">
+        <button class="dropdown-btn">Menu</button>
+        <div class="dropdown-content">
+			<!--
+            <a href="#" onclick="fetchModel('paraschute/model.json')">paraschute</a>
+            <a href="#" onclick="fetchModel('ACcomcenter_001/model.json')">ACcomcenter_001</a>
+            <a href="#" onclick="fetchModel('Computer/model.json')">Computer</a>
+			<a href="#" onclick="fetchModel('Render_Box/model.json')">Render_Box</a>
+			<a href="#" onclick="fetchModel('spice_boxes/model.json')">spice_boxes</a>
+			<a href="#" onclick="fetchModel('US_1P_SUP_Weapons/model.json')">US_1P_SUP_Weapons</a>
+			-->
+			<a href="#" onclick="exportModelAsObj()">Export model as obj</a>
+        </div>
+		<select id="models">
+		</select>
+    </div>
+	
+	
+    <script type="importmap">
+	  {
+		"imports": {
+		  "three": "https://threejs.org/build/three.module.js",
+		  "three/addons/": "https://threejs.org/examples/jsm/"
+		}
+	  }
+	</script>
+	
+	<script type="module">
+		import * as THREE from 'three';
+		
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+		
+		var scene;
+				
+		function exportModelAsObj()
+		{
+			const exporter = new OBJExporter(); // Ensure this is valid
+
+			const result = exporter.parse(scene);
+
+			// Create a Blob from the result
+			const blob = new Blob([result], { type: 'text/plain' });
+			const url = URL.createObjectURL(blob);
+
+			// Create a link element and trigger the download
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = 'model.obj';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+
+			// Clean up
+			URL.revokeObjectURL(url);
+		}
+
+		function fetchModel(file_path)
+		{
+			scene = new THREE.Scene();
+			
+			fetch(file_path)
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					
+					for(var i = 0; i < data.objects.length; i++)
+					{
+						var json_object = data.objects[i];
+						
+						for(var j = 0; j < json_object.meshes.length; j++)
+						{
+							var json_mesh = json_object.meshes[j];
+							
+							var vertices = [];
+							var normals = [];
+							var indices = [];
+							
+							for(var k = 0; k < json_mesh.vertices.length; k++)
+							{
+								vertices = addVertex(vertices, json_mesh.vertices[k].position);
+								normals = addVertex(normals, json_mesh.vertices[k].normal);
+							}
+							
+							for(var k = 0; k < json_mesh.faces.length; k++)
+							{
+								indices.push(json_mesh.faces[k].v1);
+								indices.push(json_mesh.faces[k].v2);
+								indices.push(json_mesh.faces[k].v3);
+							}
+							
+							const geometry = new THREE.BufferGeometry();
+							geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+							geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+							geometry.setIndex(indices);
+							
+							
+							const material = new THREE.MeshBasicMaterial({ color: getRandomHexColor(), wireframe: true });
+							const mesh = new THREE.Mesh(geometry, material);
+							
+							scene.add(mesh);
+						}
+					}
+					
+					// Compute the combined bounding box
+					const combinedBoundingBox = new THREE.Box3();
+
+					// Extend the bounding box for each mesh
+					scene.traverse((object) => {
+						if (object instanceof THREE.Mesh) {
+							const boundingBox = new THREE.Box3().setFromObject(object);
+							combinedBoundingBox.union(boundingBox);
+						}
+					});
+
+					// Compute the size and center of the combined bounding box
+					const size = combinedBoundingBox.getSize(new THREE.Vector3());
+					const center = combinedBoundingBox.getCenter(new THREE.Vector3());
+
+					// Position the camera to fit the entire bounding box
+					const maxSize = Math.max(size.x, size.y, size.z);
+					const cameraDistance = (maxSize * 2) / (2 * Math.tan(Math.PI * camera.fov / 360));
+
+					camera.position.set(center.x, center.y, cameraDistance);
+					camera.lookAt(center);
+
+					const animate = function ()
+					{
+						requestAnimationFrame(animate);
+						controls.update(); // Update controls
+						renderer.render(scene, camera);
+					};
+
+					animate();
+				});
+		}
+		
+		function addVertex(vertices, newVertex)
+		{
+			// Create a new Float32Array with space for the existing vertices plus the new vertex
+			let newVertices = new Float32Array(vertices.length + newVertex.length);
+
+			// Copy the existing vertices to the new array
+			newVertices.set(vertices);
+
+			// Append the new vertex
+			newVertices.set(newVertex, vertices.length);
+
+			return newVertices;
+		}
+		
+		function getRandomHexColor()
+		{
+			// Generate a random number between 0 and 0xFFFFFF (decimal 16777215)
+			const randomColor = Math.floor(Math.random() * 0xFFFFFF);
+			// Convert the number to a hexadecimal string and pad with leading zeros
+			return `#${randomColor.toString(16).padStart(6, '0')}`;
+		}
+		
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Add OrbitControls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // Enable damping (inertia)
+        controls.dampingFactor = 0.25; // Damping factor
+        controls.screenSpacePanning = false; // Disable panning
+		controls.keys = {
+			LEFT: 'ArrowLeft', //left arrow
+			UP: 'ArrowUp', // up arrow
+			RIGHT: 'ArrowRight', // right arrow
+			BOTTOM: 'ArrowDown' // down arrow
+		}
+		
+		window.addEventListener( 'resize', onWindowResize );
+		
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+		}
+		
+		// Make functions accessible globally
+        window.fetchModel = fetchModel;
+        window.exportModelAsObj = exportModelAsObj;
+		window.controls = controls;
+		
+    </script>
+	<script>
+        // Function to fetch JSON data and update the select element
+        async function updateSelectOptions() {
+            try {
+                // Fetch the JSON file
+                const response = await fetch('modelfiles.json');
+                
+                // Check if the response is ok (status code 200)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                // Parse the JSON data
+                const data = await response.json();
+
+                // Get the select element
+                const select = document.getElementById('models');
+
+                // Iterate through each item in the JSON data
+                data.forEach(item => {
+                    // Create a new option element
+                    const option = document.createElement('option');
+                    option.value = item.json_file_path; // Set the value of the option
+                    option.textContent = item.json_file_path; // Set the display text of the option
+                    
+                    // Append the option to the select element
+                    select.appendChild(option);
+                });
+				
+				window.fetchModel(data[391].json_file_path);
+				
+            } catch (error) {
+                console.error('Error fetching or processing JSON:', error);
+            }
+        }
+		
+		// Custom function to execute when an option is selected
+        function onSelectChange(event) {
+            // Get the selected value
+            const selectedValue = event.target.value;
+
+            // Custom logic or function execution
+            console.log('Selected file path:', selectedValue);
+			
+			fetchModel(selectedValue);
+        }
+		
+		// Function to handle keyboard navigation
+        function handleKeyboardNavigation(event) {
+            const select = document.getElementById('models');
+            const options = select.options;
+            const selectedIndex = select.selectedIndex;
+
+            if (event.key === 'ArrowRight') {
+                // Move to the next option
+                if (selectedIndex < options.length - 1) {
+                    select.selectedIndex = selectedIndex + 1;
+                    onSelectChange({ target: select }); // Trigger change event manually
+                }
+            } else if (event.key === 'ArrowLeft') {
+                // Move to the previous option
+                if (selectedIndex > 0) {
+                    select.selectedIndex = selectedIndex - 1;
+                    onSelectChange({ target: select }); // Trigger change event manually
+                }
+            }
+        }
+		
+		// Add an event listener to the select element
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('models');
+            select.addEventListener('change', onSelectChange);
+			document.addEventListener('keydown', handleKeyboardNavigation);
+			
+            // Call the function to update the select options
+            updateSelectOptions();
+        });
+		
+		
+    </script>
+</body>
+</html>
