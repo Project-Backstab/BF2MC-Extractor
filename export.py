@@ -7,7 +7,7 @@ from lib.viv                       import export_viv
 from lib.txt.level_static_geometry import export_level_static_geometry_txt
 from lib.txt.level                 import export_level_txt
 from lib.brs.mesh_descriptor       import export_mesh_descriptor
-from lib.lnd                       import export_ps2_lnd
+from lib.lnd.ps2                   import export_ps2_lnd
 from lib.sgf                       import export_sgf, export_sgf_beta
 from battlefield.files             import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
@@ -110,7 +110,7 @@ def main():
 					input_file_path = os.path.join(root, file)
 					
 					print("Export \"{}\"".format(input_file_path))
-					export_ps2_lnd(input_file_path, input_file_path + ".obj")
+					export_ps2_lnd(input_file_path, input_file_path + ".json")
 					print("Done!")
 		
 		for root, dirs, files in os.walk("{}/Levels/".format(config["output_directory"])):
