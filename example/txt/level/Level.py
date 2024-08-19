@@ -1,11 +1,16 @@
 #!/bin/env python3
 
 import os
-from lib.txt.level import extract_level_txt, import_level_txt
+import sys
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+
+from lib.txt.level import export_level_txt, import_level_txt
 
 def main():
-	extract_level_txt("files/BackStab/level_client.txt", "output/BackStab/level_client.txt.json")
-	extract_level_txt("files/BackStab/level_server.txt", "output/BackStab/level_server.txt.json")
+	export_level_txt("files/BackStab/level_client.txt", "output/BackStab/level_client.txt.json")
+	export_level_txt("files/BackStab/level_server.txt", "output/BackStab/level_server.txt.json")
 	
 	import_level_txt("output/BackStab/level_client.txt.json", "output/BackStab/level_client.txt")
 	import_level_txt("output/BackStab/level_server.txt.json", "output/BackStab/level_server.txt")

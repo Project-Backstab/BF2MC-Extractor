@@ -197,7 +197,7 @@ def export_ps2_lnd(input_file_path, output_file_path):
 	
 	## Write Static Geometry
 	with open(output_file_path, 'w') as f_json:
-		json.dump(land, f_json, cls=CustomEncoder, indent=4)
+		json.dump(land, f_json, cls=CustomEncoder)
 
 ## Old feature
 def export_ps2_lnd_2_obj(input_file_path, output_file_path):

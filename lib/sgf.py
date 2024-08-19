@@ -224,7 +224,7 @@ def export_sgf(input_file_path, output_file_path):
 			current_position = f_sgf.tell()
 	
 	with open(output_file_path, "w") as json_file:
-		json.dump(static_model, json_file, cls=CustomEncoder, indent=4)
+		json.dump(static_model, json_file, cls=CustomEncoder)
 
 def export_sgf_beta(input_file_path, output_file_path):
 	static_model = StaticModel()
@@ -361,5 +361,5 @@ def export_sgf_beta(input_file_path, output_file_path):
 	#	print(f"current_position, file_length = {current_position}, {file_length}")
 	
 	with open(output_file_path, "w") as json_file:
-		json.dump(static_model, json_file, cls=CustomEncoder, indent=4)
+		json.dump(static_model, json_file, cls=CustomEncoder)
 

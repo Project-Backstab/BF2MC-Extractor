@@ -107,7 +107,7 @@ def export_level_txt(input_file_path, output_file_path):
 				
 	## Write Static Geometry
 	with open(output_file_path, 'w') as f_json:
-		json.dump(level_txt, f_json, cls=CustomEncoder, indent=4)
+		json.dump(level_txt, f_json, cls=CustomEncoder)
 
 def import_level_txt(input_file_path, output_file_path):
 	with open(input_file_path, 'r') as f_json:

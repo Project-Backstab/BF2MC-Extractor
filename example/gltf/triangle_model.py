@@ -2,14 +2,15 @@
 
 from pygltflib import GLTF2, Buffer, BufferView, Accessor, Mesh, Primitive, Node, Scene
 import numpy as np
+from enum import Enum
 
-# Define componentType constants
-BYTE = 5120
-UNSIGNED_BYTE = 5121
-SHORT = 5122
-UNSIGNED_SHORT = 5123
-UNSIGNED_INT = 5125
-FLOAT = 5126
+class ComponentType(Enum):
+    BYTE = 5120
+    UNSIGNED_BYTE = 5121
+    SHORT = 5122
+    UNSIGNED_SHORT = 5123
+    UNSIGNED_INT = 5125
+    FLOAT = 5126
 
 def create_triangle_model_gltf(filename):
     gltf = GLTF2()
@@ -39,10 +40,8 @@ def create_triangle_model_gltf(filename):
     gltf.bufferViews.extend([buffer_view_vertices, buffer_view_indices])
 
     # Create accessors for vertices and indices
-    accessor_positions = Accessor(bufferView=0, byteOffset=0, componentType=FLOAT, count=3, type="VEC3",
-                                  max=[0.5, 0.5, 0.0], min=[-0.5, -0.5, 0.0])
-    accessor_indices = Accessor(bufferView=1, byteOffset=0, componentType=5123, count=3, type="SCALAR",
-                                max=[2], min=[0])
+    accessor_positions = Accessor(bufferView=0, byteOffset=0, componentType=ComponentType.FLOAT, count=3, type="VEC3", max=[0.5, 0.5, 0.0], min=[-0.5, -0.5, 0.0])
+    accessor_indices = Accessor(bufferView=1, byteOffset=0, componentType=ComponentType.UNSIGNED_SHORT, count=3, type="SCALAR", max=[2], min=[0])
     gltf.accessors.extend([accessor_positions, accessor_indices])
 
     # Create the mesh with a single primitive

@@ -1,13 +1,15 @@
 #!/bin/env python3
 
 import os
+import sys
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
 from lib.sgf import export_sgf, export_sgf_beta
 
 def main():
-	#export_static_model(input_file_path, output_file_path)
-	
-	is_beta = False
+	is_beta = True
 	
 	for root, dirs, files in os.walk('output/'):
 		for file in files:
