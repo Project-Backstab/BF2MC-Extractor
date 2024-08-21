@@ -2,7 +2,8 @@
 
 import os
 from lib.ark                       import export_ark
-from lib.cat                       import export_cat, export_cat_resource
+from lib.cat                       import export_cat
+from lib.cat_resource              import export_cat_resource
 from lib.viv                       import export_viv
 from lib.txt.level_static_geometry import export_level_static_geometry_txt
 from lib.txt.level                 import export_level_txt
@@ -22,26 +23,26 @@ configs = [
 		"is_beta":					False,
 		"extract_viv":				False
 	},
-#	{
-#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
-#		"data_ark_directory":		"BF2MC_MP/",
-#		"output_directory":			"output/V1.00/",
-#		"cat_files":				CAT_LEVEL_FILES_V1_0,
-#		"has_static_geometry":		True,
-#		"has_level_txt":			True,
-#		"is_beta":					False,
-#		"extract_viv":				False
-#	},
-#	{
-#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
-#		"data_ark_directory":		"BF2MC_MP/",
-#		"output_directory":			"output/V2.01/",
-#		"cat_files":				CAT_LEVEL_FILES_V2_01,
-#		"has_static_geometry":		True,
-#		"has_level_txt":			True,
-#		"is_beta":					False,
-#		"extract_viv":				False
-#	},
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
+		"data_ark_directory":		"BF2MC_MP/",
+		"output_directory":			"output/V1.00/",
+		"cat_files":				CAT_LEVEL_FILES_V1_0,
+		"has_static_geometry":		True,
+		"has_level_txt":			True,
+		"is_beta":					False,
+		"extract_viv":				False
+	},
+	{
+		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
+		"data_ark_directory":		"BF2MC_MP/",
+		"output_directory":			"output/V2.01/",
+		"cat_files":				CAT_LEVEL_FILES_V2_01,
+		"has_static_geometry":		True,
+		"has_level_txt":			True,
+		"is_beta":					False,
+		"extract_viv":				False
+	},
 	{
 		"iso":						"files/Battlefield 2 - Modern Combat (USA) (Beta).iso",
 		"data_ark_directory":		"",
@@ -98,8 +99,11 @@ def main():
 				output_files_path = "{}/{}/".format(output_level_path, file_name)
 				
 				print("Export \"{}\"".format(input_file_path))
-				if "resource" not in file_name:			
-					export_cat(input_file_path, output_files_path)
+				if "resource" not in file_name:
+					
+					has_audio_header = ("audio" in file_name)
+					
+					export_cat(input_file_path, output_files_path, has_audio_header)
 				else:
 					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")

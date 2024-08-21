@@ -1,0 +1,8 @@
+Download the latest vgmstream-cli for linux:
+https://github.com/vgmstream/vgmstream
+
+
+Make the executable available everywhere:
+
+	sudo cp vgmstream-cli /usr/local/bin
+	sudo chmod +x /usr/local/bin/vgmstream-cli
