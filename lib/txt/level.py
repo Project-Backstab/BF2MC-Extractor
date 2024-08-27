@@ -6,9 +6,21 @@ from dataclasses import dataclass, field, asdict, is_dataclass
 from typing import List
 
 @dataclass
+class Coordination:
+    x: float
+    y: float
+    z: float
+
+@dataclass
+class Rotation:
+    x: float
+    y: float
+    z: float
+
+@dataclass
 class TransformData:
-	pos: List[float] = field(default_factory=list)
-	rot: List[float] = field(default_factory=list)
+	pos: Coordination = field(default_factory=lambda: Coordination(0.0, 0.0, 0.0))
+	rot: Rotation = field(default_factory=lambda: Rotation(0.0, 0.0, 0.0))
 
 @dataclass
 class Mesh:
@@ -98,8 +110,13 @@ def export_level_txt(input_file_path, output_file_path):
 			for j in range(instances_length):
 				transform = TransformData()
 				
-				transform.pos = list(struct.unpack('<3f', f_txt.read(0xC)))
-				transform.rot = list(struct.unpack('<3f', f_txt.read(0xC)))
+				transform.pos.x = struct.unpack('<f', f_txt.read(0x4))[0]
+				transform.pos.y = struct.unpack('<f', f_txt.read(0x4))[0]
+				transform.pos.z = struct.unpack('<f', f_txt.read(0x4))[0]
+				
+				transform.rot.x = struct.unpack('<f', f_txt.read(0x4))[0]
+				transform.rot.y = struct.unpack('<f', f_txt.read(0x4))[0]
+				transform.rot.z = struct.unpack('<f', f_txt.read(0x4))[0]
 				
 				component.instances.append(transform)
 		
@@ -160,7 +177,12 @@ def import_level_txt(input_file_path, output_file_path):
 				
 				for instance in instances:
 					## Position
-					f_txt.write(struct.pack("<3f", *instance["pos"]))
+					f_txt.write(struct.pack("<f", instance["pos"]["x"]))
+					f_txt.write(struct.pack("<f", instance["pos"]["y"]))
+					f_txt.write(struct.pack("<f", instance["pos"]["z"]))
 					
 					## Rotation
-					f_txt.write(struct.pack("<3f", *instance["rot"]))
+					f_txt.write(struct.pack("<f", instance["rot"]["x"]))
+					f_txt.write(struct.pack("<f", instance["rot"]["y"]))
+					f_txt.write(struct.pack("<f", instance["rot"]["z"]))
+					

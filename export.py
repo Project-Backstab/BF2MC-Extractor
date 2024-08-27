@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/bin/env python3.11
 
 import os
 from lib.ark                       import export_ark
@@ -9,6 +9,8 @@ from lib.txt.level_static_geometry import export_level_static_geometry_txt
 from lib.txt.level                 import export_level_txt
 from lib.brs.mesh_descriptor       import export_mesh_descriptor
 from lib.lnd.ps2                   import export_ps2_lnd
+from lib.blend.lnd                 import export_lnd_2_blend
+from lib.blend.static_model        import export_static_model_2_blend
 from lib.sgf                       import export_sgf, export_sgf_beta
 from battlefield.files             import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
@@ -23,26 +25,26 @@ configs = [
 		"is_beta":					False,
 		"extract_viv":				False
 	},
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
-		"data_ark_directory":		"BF2MC_MP/",
-		"output_directory":			"output/V1.00/",
-		"cat_files":				CAT_LEVEL_FILES_V1_0,
-		"has_static_geometry":		True,
-		"has_level_txt":			True,
-		"is_beta":					False,
-		"extract_viv":				False
-	},
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
-		"data_ark_directory":		"BF2MC_MP/",
-		"output_directory":			"output/V2.01/",
-		"cat_files":				CAT_LEVEL_FILES_V2_01,
-		"has_static_geometry":		True,
-		"has_level_txt":			True,
-		"is_beta":					False,
-		"extract_viv":				False
-	},
+#	{
+#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
+#		"data_ark_directory":		"BF2MC_MP/",
+#		"output_directory":			"output/V1.00/",
+#		"cat_files":				CAT_LEVEL_FILES_V1_0,
+#		"has_static_geometry":		True,
+#		"has_level_txt":			True,
+#		"is_beta":					False,
+#		"extract_viv":				False
+#	},
+#	{
+#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
+#		"data_ark_directory":		"BF2MC_MP/",
+#		"output_directory":			"output/V2.01/",
+#		"cat_files":				CAT_LEVEL_FILES_V2_01,
+#		"has_static_geometry":		True,
+#		"has_level_txt":			True,
+#		"is_beta":					False,
+#		"extract_viv":				False
+#	},
 	{
 		"iso":						"files/Battlefield 2 - Modern Combat (USA) (Beta).iso",
 		"data_ark_directory":		"",
@@ -71,7 +73,7 @@ def main():
 		print("Export \"{}\"".format(input_ark_file))
 		export_ark(input_ark_file, output_ark_directory)
 		print("Done!")
-		
+
 		## Iterate through each level
 		for level_name, file_names in config["cat_files"].items():
 			input_level_path = "{}/DATA.ARK/Border/Levels/{}/".format(config["output_directory"], level_name)
@@ -107,6 +109,7 @@ def main():
 				else:
 					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")
+			
 		
 		for root, dirs, files in os.walk("{}/DATA.ARK/".format(config["output_directory"])):
 			for file in files:
@@ -115,6 +118,7 @@ def main():
 					
 					print("Export \"{}\"".format(input_file_path))
 					export_ps2_lnd(input_file_path, input_file_path + ".json")
+					export_lnd_2_blend(input_file_path + ".json", input_file_path + ".blend")
 					print("Done!")
 		
 		for root, dirs, files in os.walk("{}/Levels/".format(config["output_directory"])):
@@ -125,19 +129,25 @@ def main():
 					print("Export \"{}\"".format(input_file_path))
 					export_mesh_descriptor(input_file_path, input_file_path + ".json")
 					print("Done!")
-					
-				
+
 				if file.endswith('.sgf'):
 					input_file_path = os.path.join(root, file)
 					output_file_path = f"{input_file_path}.json"
+					output_file_path2 = f"{input_file_path}.blend"
 					
 					print(f"Export \"{input_file_path}\"")
 					if(config["is_beta"]):
 						export_sgf_beta(input_file_path, output_file_path)
 					else:
 						export_sgf(input_file_path, output_file_path)
+					
+					try:
+						export_static_model_2_blend(output_file_path, output_file_path2)
+					except:
+						pass
+					
 					print("Done!")
-		
+
 		if(config["extract_viv"]):
 			print("Export \"output/iso/SINGLE/8.VIV\"")
 			export_viv("output/iso/SINGLE/8.VIV", "output/8.VIV/")

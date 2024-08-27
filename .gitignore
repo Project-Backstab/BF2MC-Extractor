@@ -2,6 +2,8 @@ files/
 output/
 __pycache__/
 
+example/blend/
+
 docs/swizzling/COPYING
 docs/swizzling/devil.dll
 docs/swizzling/ezSwizzle.exe
