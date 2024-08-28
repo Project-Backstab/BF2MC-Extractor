@@ -1,18 +1,20 @@
 #!/bin/env python3.11
 
 import os
-from lib.ark                       import export_ark
-from lib.cat                       import export_cat
-from lib.cat_resource              import export_cat_resource
-from lib.viv                       import export_viv
-from lib.txt.level_static_geometry import export_level_static_geometry_txt
-from lib.txt.level                 import export_level_txt
-from lib.brs.mesh_descriptor       import export_mesh_descriptor
-from lib.lnd.ps2                   import export_ps2_lnd
-from lib.blend.lnd                 import export_lnd_2_blend
-from lib.blend.static_model        import export_static_model_2_blend
-from lib.sgf                       import export_sgf, export_sgf_beta
-from battlefield.files             import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
+from lib.ark                            import export_ark
+from lib.cat                            import export_cat
+from lib.cat_resource                   import export_cat_resource
+from lib.viv                            import export_viv
+from lib.txt.level_static_geometry      import export_level_static_geometry_txt
+from lib.txt.beta.level_static_geometry import export_beta_level_static_geometry_txt
+from lib.txt.level                      import export_level_txt
+from lib.txt.beta.level                 import export_beta_level_txt
+from lib.brs.mesh_descriptor            import export_mesh_descriptor
+from lib.lnd.ps2                        import export_ps2_lnd
+from lib.blend.lnd                      import export_lnd_2_blend
+from lib.blend.static_model             import export_static_model_2_blend
+from lib.sgf                            import export_sgf, export_sgf_beta
+from battlefield.files                  import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
 
 configs = [
 	{
@@ -80,20 +82,24 @@ def main():
 			output_level_path = "{}/Levels/{}/".format(config["output_directory"], level_name)
 			
 			## Level Static Geometry .txt
-			if(config["has_static_geometry"]):
-				input_static_geometry = "{}/level_client_static_geometry.txt".format(input_level_path)
+			input_static_geometry = "{}/level_client_static_geometry.txt".format(input_level_path)
 				
-				print("Export \"{}\"".format(input_static_geometry))
+			print("Export \"{}\"".format(input_static_geometry))
+			if(config["is_beta"]):
+				export_beta_level_static_geometry_txt(input_static_geometry, input_static_geometry + ".json")
+			else:
 				export_level_static_geometry_txt(input_static_geometry, input_static_geometry + ".json")
-				print("Done!")
+			print("Done!")
 				
 			## Level .txt
-			if(config["has_level_txt"]):
-				input_level_txt = "{}/level_client.txt".format(input_level_path)
+			input_level_txt = "{}/level_client.txt".format(input_level_path)
 				
-				print("Export \"{}\"".format(input_level_txt))
+			print("Export \"{}\"".format(input_level_txt))
+			if(config["is_beta"]):
+				export_beta_level_txt(input_level_txt, input_level_txt + ".json")
+			else:
 				export_level_txt(input_level_txt, input_level_txt + ".json")
-				print("Done!")
+			print("Done!")
 			
 			## Extract cat files
 			for file_name in file_names:
@@ -109,7 +115,6 @@ def main():
 				else:
 					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")
-			
 		
 		for root, dirs, files in os.walk("{}/DATA.ARK/".format(config["output_directory"])):
 			for file in files:
