@@ -8,6 +8,7 @@ from typing import List
 @dataclass
 class Vertex:
 	position: List[float] = field(default_factory=list)
+	uv: List[float] = field(default_factory=list)
 	unknown_1: str = ""
 	flag: int = 0
 
@@ -188,13 +189,15 @@ def export_sgf(input_file_path, output_file_path):
 					vertex = Vertex()
 					
 					vertex.position = list(struct.unpack('<3f', f_sgf.read(12)))
-					vertex.unknown_1 = f_sgf.read(40).hex()
+					vertex.uv = list(struct.unpack('<3f', f_sgf.read(12)))
+					vertex.unknown_1 = f_sgf.read(28).hex()
 					vertex.flag = struct.unpack('<I', f_sgf.read(4))[0]
 					
 					mesh.vertices.append(vertex)
 					
 					#print(f"		Vertex {vertex_index}:")
 					#print(f"			position  = {vertex.position}")
+					#print(f"			uv        = {vertex.uv}")
 					#print(f"			unknown_1 = 0x{vertex.unknown_1}")
 					#print(f"			flag      = {vertex.flag}")
 					

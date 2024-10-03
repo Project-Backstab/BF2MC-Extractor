@@ -1,6 +1,5 @@
-#!/bin/env python3.11
-
 import os
+from config                             import CONFIGS
 from lib.ark                            import export_ark
 from lib.cat                            import export_cat
 from lib.cat_resource                   import export_cat_resource
@@ -13,54 +12,11 @@ from lib.brs.mesh_descriptor            import export_mesh_descriptor
 from lib.lnd.ps2                        import export_ps2_lnd
 from lib.blend.lnd                      import export_lnd_2_blend
 from lib.blend.static_model             import export_static_model_2_blend
+from lib.blend.scene                    import export_scene
 from lib.sgf                            import export_sgf, export_sgf_beta
-from battlefield.files                  import CAT_LEVEL_FILES, CAT_LEVEL_FILES_V1_0, CAT_LEVEL_FILES_V2_01, CAT_LEVEL_FILES_BETA
-
-configs = [
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (USA).iso",
-		"data_ark_directory":		"BF2MC_MP/",
-		"output_directory":			"output/US/",
-		"cat_files":				CAT_LEVEL_FILES,
-		"has_static_geometry":		True,
-		"has_level_txt":			True,
-		"is_beta":					False,
-		"extract_viv":				False
-	},
-#	{
-#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v1.00).iso",
-#		"data_ark_directory":		"BF2MC_MP/",
-#		"output_directory":			"output/V1.00/",
-#		"cat_files":				CAT_LEVEL_FILES_V1_0,
-#		"has_static_geometry":		True,
-#		"has_level_txt":			True,
-#		"is_beta":					False,
-#		"extract_viv":				False
-#	},
-#	{
-#		"iso":						"files/Battlefield 2 - Modern Combat (Europe) (En,Es,Nl,Sv) (v2.01).iso",
-#		"data_ark_directory":		"BF2MC_MP/",
-#		"output_directory":			"output/V2.01/",
-#		"cat_files":				CAT_LEVEL_FILES_V2_01,
-#		"has_static_geometry":		True,
-#		"has_level_txt":			True,
-#		"is_beta":					False,
-#		"extract_viv":				False
-#	},
-	{
-		"iso":						"files/Battlefield 2 - Modern Combat (USA) (Beta).iso",
-		"data_ark_directory":		"",
-		"output_directory":			"output/BETA/",
-		"cat_files":				CAT_LEVEL_FILES_BETA,
-		"has_static_geometry":		False,
-		"has_level_txt":			False,
-		"is_beta":					True,
-		"extract_viv":				False
-	},
-]
 
 def main():
-	for config in configs:
+	for config in CONFIGS:
 		## Create directories if they are missing
 		os.makedirs(config["output_directory"], exist_ok=True)
 		os.makedirs("{}/Levels/".format(config["output_directory"]), exist_ok=True)
@@ -76,7 +32,7 @@ def main():
 		export_ark(input_ark_file, output_ark_directory)
 		print("Done!")
 
-		## Iterate through each level
+		## Iterate through all cat files
 		for level_name, file_names in config["cat_files"].items():
 			input_level_path = "{}/DATA.ARK/Border/Levels/{}/".format(config["output_directory"], level_name)
 			output_level_path = "{}/Levels/{}/".format(config["output_directory"], level_name)
@@ -116,6 +72,7 @@ def main():
 					export_cat_resource(input_file_path, output_files_path)
 				print("Done!")
 		
+		## Export landscape files
 		for root, dirs, files in os.walk("{}/DATA.ARK/".format(config["output_directory"])):
 			for file in files:
 				if file.endswith('.lnd'):
@@ -126,6 +83,7 @@ def main():
 					export_lnd_2_blend(input_file_path + ".json", input_file_path + ".blend")
 					print("Done!")
 		
+		## export .brs and .sgf files
 		for root, dirs, files in os.walk("{}/Levels/".format(config["output_directory"])):
 			for file in files:
 				if file.endswith('.brs'):
@@ -152,7 +110,12 @@ def main():
 						pass
 					
 					print("Done!")
-
+		
+		## Combine objects and export scene
+		for level_name, file_names in config["cat_files"].items():
+			export_scene(config["output_directory"], level_name)
+		
+		## Export viv
 		if(config["extract_viv"]):
 			print("Export \"output/iso/SINGLE/8.VIV\"")
 			export_viv("output/iso/SINGLE/8.VIV", "output/8.VIV/")

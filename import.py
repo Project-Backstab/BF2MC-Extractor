@@ -1,5 +1,3 @@
-#!/bin/env python3
-
 import os
 from lib.ark import import_ark
 from lib.cat import import_cat

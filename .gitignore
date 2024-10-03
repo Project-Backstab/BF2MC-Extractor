@@ -3,6 +3,7 @@ output/
 __pycache__/
 
 example/blend/
+example/sux/SUX3_Converter/
 
 docs/swizzling/COPYING
 docs/swizzling/devil.dll
