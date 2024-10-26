@@ -1,3 +1,0 @@
-/var/www/BF2MC-Extractor/example/block_inspector/build/CMakeFiles/block_inspector.dir
-/var/www/BF2MC-Extractor/example/block_inspector/build/CMakeFiles/edit_cache.dir
-/var/www/BF2MC-Extractor/example/block_inspector/build/CMakeFiles/rebuild_cache.dir

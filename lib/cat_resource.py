@@ -220,11 +220,6 @@ def export_cat_resource(input_cat_filepath, output_files_path):
 					file_info.file_path_space = len(match.group(2))
 					file_info.data_offset = data_offset
 					
-					## Rare exception: It looks like a object is corrupt
-					## Corrupt: StaticModel Objects/MISC/Lamp/Lamp_001_W.sgf:Render_Lit
-					if(file_info.file_path == "Objects/MISC/Lamp/Lamp_001_W.brs:Component_UnLit" and content[data_offset-1:data_offset] == "\n".encode("ascii")):
-						break
-					
 					## Case @ infront
 					if(content[data_offset-1:data_offset] == "@".encode('ascii')):
 						file_info.data_offset -= 1

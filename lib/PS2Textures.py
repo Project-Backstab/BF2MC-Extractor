@@ -253,10 +253,10 @@ def write_tex_psmt4(dbp, dbw, dsax, dsay, rrw, rrh, data):
 			gsmem[start_block_pos + page * 2048 + block * 64 + column * 16 + cw] = dst
 
 def read_tex_psmt4(dbp, dbw, dsax, dsay, rrw, rrh):
-	dbw //= 2
-	result = []
-	start_block_pos = dbp * 64
+	dbw >>= 1
+	startBlockPos = dbp * 64
 	odd = False
+	result = []
 
 	for y in range(dsay, dsay + rrh):
 		for x in range(dsax, dsax + rrw):
@@ -280,8 +280,9 @@ def read_tex_psmt4(dbp, dbw, dsax, dsay, rrw, rrh):
 			cy = by - column * 4
 			cw = column_word_4[column % 2][cx + cy * 32]
 			cb = column_byte_4[cx + cy * 32]
-
-			src = gsmem[start_block_pos + page * 2048 + block * 64 + column * 16 + cw]
+			
+			src = gsmem[startBlockPos + (page * 2048) + (block * 64) + (column * 16) + cw]
+			src = src[cb // 2]
 
 			if cb & 1:
 				if odd:
@@ -297,3 +298,50 @@ def read_tex_psmt4(dbp, dbw, dsax, dsay, rrw, rrh):
 			odd = not odd
 
 	return result
+
+def FromPS2Palette(palette):
+	# Convert the palette list of bytes to a list of 32-bit integers
+	palette32 = [int.from_bytes(palette[i:i+4], byteorder='little') for i in range(0, len(palette), 4)]
+
+	# Perform the swapping logic
+	for i in range(8):
+		for j in range(8):
+			index1 = 8 + i * 32 + j
+			index2 = 16 + i * 32 + j
+			palette32[index1], palette32[index2] = palette32[index2], palette32[index1]
+
+	# Convert the list of 32-bit integers back to a list of bytes
+	palette = bytearray()
+	for value in palette32:
+		palette.extend(value.to_bytes(4, byteorder='little'))
+
+	# Perform the second part of the swapping and alpha conversion
+	for i in range(0, 1024, 4):
+		palette[i + 0], palette[i + 2] = palette[i + 2], palette[i + 0]
+		#palette[i + 3] = FromPS2Alpha(palette[i + 3])
+		palette[i + 3] = 0xFF
+		
+	return list(palette)
+
+def ToPS2Palette(palette):
+	# Perform the first part of the swapping and alpha conversion
+	for i in range(0, 1024, 4):
+		palette[i + 0], palette[i + 2] = palette[i + 2], palette[i + 0]
+		palette[i + 3] = 0x80
+
+	# Convert the palette list of bytes to a list of 32-bit integers
+	palette32 = [int.from_bytes(palette[i:i+4], byteorder='little') for i in range(0, len(palette), 4)]
+
+	# Perform the swapping logic
+	for i in range(8):
+		for j in range(8):
+			index1 = 8 + i * 32 + j
+			index2 = 16 + i * 32 + j
+			palette32[index1], palette32[index2] = palette32[index2], palette32[index1]
+
+	# Convert the modified list of 32-bit integers back to a list of bytes
+	palette = bytearray()
+	for value in palette32:
+		palette.extend(value.to_bytes(4, byteorder='little'))
+
+	return list(palette)

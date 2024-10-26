@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wno-deprecated-declarations -s CMakeFiles/block_inspector.dir/src/main.cpp.o CMakeFiles/block_inspector.dir/src/PS2Textures.cpp.o -o block_inspector 

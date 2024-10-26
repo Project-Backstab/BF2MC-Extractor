@@ -3,7 +3,8 @@ output/
 __pycache__/
 
 example/blend/
-example/sux/SUX3_Converter/
+example/sux/
+example/sgf/doc/StaticModel/XBOX360/
 
 docs/swizzling/COPYING
 docs/swizzling/devil.dll
