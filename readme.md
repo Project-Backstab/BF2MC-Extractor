@@ -20,12 +20,56 @@ The 3d models are been exported to blender. Then all the objects are been linked
 
 ## Install
 
-You need python3 to run the project with following packages:
 
-	pip3 install bpy
+You need python3.11 and 7z to run the project.
 
-You also will need 7z to extract the iso.
+```bash
+	sudo apt update
+	sudo apt install -y software-properties-common
+	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo apt update
+```
+```
+	sudo apt install -y \
+	  python3.11 python3.11-distutils python3.11-dev \
+	  python3-pip p7zip-full \
+	  build-essential git cmake ninja-build \
+	  libx11-dev libxxf86vm-dev libxrandr-dev libxi-dev \
+	  libasound2-dev libopenal-dev libsndfile1-dev \
+	  libjpeg-dev libpng-dev libtiff5-dev libopenexr-dev \
+	  libglu1-mesa-dev libglew-dev libssl-dev
+```
+
+Install pip for Python3.11
+```
+	curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+	sudo python3.11 /tmp/get-pip.py
+```
+
+Install additional depdendencies including the Blender bpy module.
+```
+	sudo python3.11 -m pip install --upgrade pip setuptools wheel
+	sudo python3.11 -m pip install \
+	  numpy<2.0 \
+	  Pillow \
+	  bpy
+```
+
+Verify bpy is installed
+
+```
+	python3.11 -c "import bpy; print('Loaded bpy, Blender', bpy.app.version_string)"
+
+```
+→ Loaded bpy, Blender 4.4.0
+
+Within the BF2MC-Extractor folder create a directory called 'files'
+```
+	~/BF2MC-Extractor/files
+```
+
+Drop your ISO here and refer to config.py to comment in/out the version of game you are extracting. Pay attention to the .iso naming here.
 
 ## How to export
 
-	python3 export.py
+	python3.11 export.py
